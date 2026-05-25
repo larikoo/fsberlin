@@ -3,7 +3,7 @@ id: 01JBADR008000000000000000
 title: "Stack with adjacent tools; do not absorb"
 type: adr
 adr_number: 8
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari
@@ -61,6 +61,16 @@ Concretely:
 
 The opacity list is configurable per-project but starts with sensible
 defaults including all the above.
+
+**Beads as AI session memory.** AI agents operating as users may use
+the `bd` CLI to write session context — notes that survive across
+conversation sessions, track open questions, or record decisions made
+mid-session. This is the AI *using Beads as a tool*, the same way a
+human would. It does not violate the opacity rule: FSBerlin-the-substrate
+never reads `.beads/`; the AI agent is simply running `bd` commands
+outside the substrate's scope. The session memory pattern is encouraged
+— it gives AI agents continuity without burdening the card system with
+ephemeral context.
 
 ## Consequences
 

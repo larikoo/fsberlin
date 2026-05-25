@@ -3,7 +3,7 @@ id: 01JBADR005000000000000000
 title: "Two HITL floors enforced by the substrate"
 type: adr
 adr_number: 5
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari

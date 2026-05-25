@@ -3,7 +3,7 @@ id: 01JBADR006000000000000000
 title: "Validators mechanical; Spymaster advisory"
 type: adr
 adr_number: 6
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari

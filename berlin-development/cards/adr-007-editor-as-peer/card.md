@@ -3,7 +3,7 @@ id: 01JBADR007000000000000000
 title: "Editor as peer with MCP"
 type: adr
 adr_number: 7
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari

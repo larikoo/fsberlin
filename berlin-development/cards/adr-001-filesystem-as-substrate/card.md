@@ -3,7 +3,7 @@ id: 01JBADR001000000000000000
 title: "Filesystem as substrate"
 type: adr
 adr_number: 1
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari

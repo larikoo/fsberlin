@@ -3,7 +3,7 @@ id: 01JBADR004000000000000000
 title: "Agents are users; models are runtime"
 type: adr
 adr_number: 4
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari

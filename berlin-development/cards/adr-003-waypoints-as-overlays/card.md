@@ -3,7 +3,7 @@ id: 01JBADR003000000000000000
 title: "Waypoints as overlays on a base"
 type: adr
 adr_number: 3
-planning_status: proposed
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari
@@ -27,17 +27,34 @@ Date: 2026-05-25
 
 ## Context
 
-Project roadmaps express "what state should this project be in at
-future milestone N." The naive approach is to write a roadmap document
-that lists target states. But target states drift relative to current
-state, and keeping them aligned requires rewriting the roadmap every
-time the current state changes.
+FSBerlin has two distinct temporal concepts that must not be conflated:
 
-The better question: *what's the diff between now and milestone N?*
-That diff is what a roadmap should encode.
+**Phases** are work containers — periods of time with a defined mode of
+work (plan, build, test, liveops). A phase has criteria that act as a
+gate: the phase is complete when all criteria cards reach their terminal
+state. Phases answer *how* you are working right now.
 
-This is the same pattern as Kustomize (Kubernetes), Nix overlays, and
-Docker image layers: base + overlay = projected state.
+**Waypoints** are milestone projections — points in time where the
+project is expected to have reached a certain shape. A waypoint answers
+*where* you are aiming. Several phases may sit between two waypoints.
+Reaching a waypoint is a reality test: does the actual project state
+match the projected state?
+
+Project roadmaps naively express "what state should this project be in
+at future milestone N" as a document. But those documents drift as
+current state changes, requiring constant manual rewriting.
+
+The better model: encode the diff between now and milestone N as a
+structured overlay. This is the same pattern as Kustomize (Kubernetes),
+Nix overlays, and Docker image layers: base + overlay = projected state.
+
+The projected state at waypoint N is largely deterministic — it is the
+base plus the cumulative work product of all preceding phases. An AI
+agent can flesh this out: populating example files, realistic card
+content, a file tree that looks like a live project rather than a
+skeleton. This makes a waypoint a concrete, inspectable artifact that
+answers "what will we have built?" — useful for demos, onboarding, and
+keeping the goal tangible during long build phases.
 
 ## Decision
 
@@ -58,6 +75,14 @@ Waypoints are sequential stages of the chosen plan. Git branches are
 alternative plans (you can branch the whole project to explore a
 different roadmap, each branch with its own waypoint sequence).
 
+**Waypoints are opt-in in depth.** A waypoint folder may be as thin as
+a single `waypoint.md` listing the features expected at that milestone
+— effectively just a named criteria list. Or it may be a full file tree
+projection with populated cards, example files, and fleshed-out content.
+Both are valid. A project that wants to stay light uses the former; a
+project that wants concrete demos or onboarding artifacts uses the
+latter. The substrate does not impose a depth requirement.
+
 ## Consequences
 
 **Easier:**
@@ -65,6 +90,14 @@ different roadmap, each branch with its own waypoint sequence).
 - The diff between waypoint N and N+1 *is* the planned progress.
 - Branching for "what-if" planning is git's job, free.
 - Tags on waypoint acceptance create natural milestone snapshots.
+- The projected state at waypoint N is largely deterministic: base +
+  the cumulative work product of all preceding phases. The structure
+  follows from the phases; it does not need to be invented.
+- AI agents can flesh out the projection — populating example files,
+  realistic card content, and a populated file tree that makes the
+  waypoint look like a live project rather than a skeleton. Useful for
+  demos, onboarding, and keeping motivation concrete during long build
+  phases.
 
 **Harder:**
 - Rendering requires merge logic; not just file reads.
