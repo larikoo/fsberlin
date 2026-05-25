@@ -1,0 +1,28 @@
+# Agent definition schema for FSBerlin.
+# Status: draft. Locks in Phase 0. See ADR-004.
+#
+# Agents are first-class users. This schema describes the YAML file
+# at agents/<agent-id>.yaml.
+
+required:
+  - id              # Stable agent ID. Slug-style, immutable.
+  - role            # Short human-readable role description.
+  - why             # Path to why.md or inline rationale.
+  - default_model   # Model name from the model registry.
+  - permitted_models # List of model names the agent may use.
+  - read_scope      # List of glob patterns the agent may read.
+  - write_scope     # List of glob patterns the agent may write.
+  - type            # Enum: human | ai
+
+optional:
+  - description     # Longer description.
+  - prompt_path     # Path to system prompt file (for AI agents).
+  - schedule        # Cron-like schedule for scheduled agents.
+  - sandbox         # Bool. Whether agent runs in a sandboxed container.
+  - network_access  # Bool. Default false for AI agents.
+
+# === Notes ===
+# - Agent definitions are invariant-floor files (ADR-005).
+#   Changes require human signature.
+# - read_scope and write_scope use glob patterns relative to project root.
+# - The default human agent template lives at agents/_template-human.yaml.

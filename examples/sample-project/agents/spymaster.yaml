@@ -1,0 +1,25 @@
+# Spymaster agent definition (example).
+# See ADR-004 for the agent model and ADR-006 for the advisory role.
+
+id: spymaster
+type: ai
+role: cross-project consistency checker
+why: catches semantic conflicts the validators can't
+default_model: gemma-4-local
+permitted_models:
+  - gemma-4-local
+  - qwen-3-local
+  - claude-haiku-4-5
+
+read_scope:
+  - "cards/**"
+  - "waypoints/**"
+  - "why.md"
+  - "agents/*.yaml"
+
+write_scope:
+  - "findings/spymaster/**"
+
+schedule: "0 */6 * * *"   # every 6 hours
+sandbox: true
+network_access: false

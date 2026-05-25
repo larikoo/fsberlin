@@ -1,0 +1,45 @@
+# Card frontmatter schema for FSBerlin.
+# Status: draft. Locks in Phase 0.
+#
+# This is a YAML schema (not JSON Schema yet — that's a Phase 0 decision)
+# describing the required and optional fields in a card's frontmatter.
+
+# === Required fields ===
+required:
+  - id              # ULID (26 chars). Stable, immutable. Generated on init.
+  - title           # Short human title. Free-form string, < 200 chars.
+  - type            # Enum: card | adr | phase | waypoint
+  - status          # Enum: pending | in-progress | review | done | blocked | archived
+  - created         # ISO 8601 date. Set on creation, never updated.
+
+# === Optional fields ===
+optional:
+  - assignee        # Agent ID (human or AI). See agents/<id>.yaml.
+  - skills          # List of skill tags.
+  - priority        # Enum: low | medium | high | critical
+  - depends_on      # List of card UUIDs this card depends on.
+  - blocks          # List of card UUIDs blocked by this card.
+  - linked          # List of card UUIDs related but not blocking.
+  - waypoints       # List of waypoint slugs this card belongs to.
+  - phase           # Integer. Which phase this card is part of.
+  - updated         # ISO 8601 datetime. Substrate-managed, not user-edited.
+  - tags            # Free-form tags.
+
+# === ADR-specific fields (when type=adr) ===
+adr_fields:
+  - adr_number      # Integer. Sequential.
+  - supersedes      # ADR slug, if applicable.
+  - superseded_by   # ADR slug, if applicable.
+
+# === Phase-specific fields (when type=phase) ===
+phase_fields:
+  - phase_number    # Integer.
+  - estimated_weeks # Float.
+  - success_criteria # List of strings.
+
+# === Validation rules ===
+# - id is immutable after creation
+# - status transitions are restricted (see schema/transitions.yaml when locked)
+# - depends_on UUIDs must exist
+# - title <= 200 chars
+# - depends_on cannot contain self

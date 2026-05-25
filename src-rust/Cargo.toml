@@ -1,0 +1,31 @@
+# Cargo.toml for the FSBerlin substrate core.
+# Status: skeleton only. Phase 1 work.
+#
+# Members will include:
+# - berlin-core    (substrate library)
+# - berlin-cli     (CLI binary)
+# - berlin-mcp     (MCP server binary, using rmcp)
+# - berlin-validators (shared validator library)
+
+[workspace]
+members = []
+resolver = "2"
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+license = "AGPL-3.0-or-later"
+authors = ["Lari Kemiläinen <lari@example.com>"]
+repository = "https://github.com/lariKemiläinen/fsberlin"
+
+[workspace.dependencies]
+# Anticipated deps — to be confirmed in Phase 1.
+# serde = { version = "1", features = ["derive"] }
+# serde_yaml = "0.9"
+# tokio = { version = "1", features = ["full"] }
+# notify = "6"
+# rusqlite = { version = "0.32", features = ["bundled"] }
+# rmcp = { version = "0.16", features = ["server"] }
+# gix = "0.66"           # gitoxide
+# ulid = "1"
+# clap = { version = "4", features = ["derive"] }

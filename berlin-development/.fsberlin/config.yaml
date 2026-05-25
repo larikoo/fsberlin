@@ -1,0 +1,18 @@
+project_id: 01JBSELF0000000000000000001
+name: FSBerlin Development
+created: 2026-05-25
+schema_version: "0.1"
+
+description: |
+  FSBerlin's own development, managed as an FSBerlin project.
+
+stewards:
+  - lari
+
+opaque_paths:
+  - .git
+  - .beads
+  - .github
+  - target
+  - __pycache__
+  - node_modules

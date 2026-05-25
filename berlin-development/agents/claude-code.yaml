@@ -1,0 +1,23 @@
+# Claude Code agent definition for FSBerlin development.
+id: claude-code
+type: ai
+role: substrate implementer
+why: implements phase tickets as Rust/Python code under human review
+default_model: claude-opus-4-7
+permitted_models:
+  - claude-opus-4-7
+  - claude-sonnet-4-6
+
+read_scope:
+  - "**/*"
+
+write_scope:
+  - "src-rust/**"
+  - "src-python/**"
+  - "schema/**"
+  - "berlin-development/cards/phase-*/comments/**"
+  - "berlin-development/cards/phase-*/card.md"   # status updates only
+  - "tests/**"
+
+network_access: false
+sandbox: false   # runs as the user in their dev env

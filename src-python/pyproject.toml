@@ -1,0 +1,22 @@
+# pyproject.toml for FSBerlin agent runtime.
+# Status: skeleton. Phase 6 work.
+
+[project]
+name = "fsberlin-agents"
+version = "0.0.1"
+description = "Python agent runtime for FSBerlin"
+requires-python = ">=3.12"
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "Lari Kemiläinen" }]
+
+[project.optional-dependencies]
+# Anticipated deps — to be confirmed in Phase 6.
+# mcp = "^0.16"           # MCP Python SDK
+# anthropic = "^0.40"     # Anthropic API client
+# ollama = "^0.4"         # Local Ollama client
+# pyyaml = "^6"
+# pydantic = "^2"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

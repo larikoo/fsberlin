@@ -1,0 +1,16 @@
+# Lari (human steward).
+id: lari
+type: human
+role: project steward and architect
+why: owns the why, signs invariant-floor changes, reviews phase PRs
+
+default_model: na   # humans don't have models
+permitted_models: []
+
+read_scope:
+  - "**/*"
+write_scope:
+  - "**/*"          # human Steward; floors still enforced cryptographically
+
+network_access: true
+sandbox: false

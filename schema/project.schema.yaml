@@ -1,0 +1,19 @@
+# Project-level configuration schema for FSBerlin.
+# Status: draft. Locks in Phase 0.
+#
+# Lives at .fsberlin/config.yaml.
+
+required:
+  - project_id      # ULID for the project itself.
+  - name            # Human-readable project name.
+  - created         # ISO 8601 date.
+  - schema_version  # FSBerlin schema version this project targets.
+
+optional:
+  - description
+  - stewards        # List of agent IDs with Steward authority.
+  - opaque_paths    # List of paths FSBerlin must not scan (ADR-008).
+                    # Defaults: [.git, .beads, .github, node_modules, target,
+                    #            __pycache__, .idea, .vscode]
+  - validators_config
+  - watcher_config

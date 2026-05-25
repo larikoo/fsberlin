@@ -1,0 +1,22 @@
+# Waypoint schema for FSBerlin.
+# Status: draft. Locks in Phase 0. See ADR-003.
+
+required:
+  - id              # Waypoint ULID.
+  - slug            # Human-readable folder name.
+  - title           # Short title.
+  - status          # Enum: planned | active | reached | abandoned
+
+optional:
+  - target_date     # ISO 8601 date (aspirational).
+  - reached_date    # ISO 8601 date (set when status -> reached).
+  - depends_on      # Other waypoint slugs that must be reached first.
+  - description
+  - success_criteria # List of strings — concrete tests for "reached."
+
+# === Notes ===
+# - The overlay files inside a waypoint folder are NOT part of this schema.
+#   They are files with the same paths as base files; the schema for each
+#   overlay file is the schema for the file it shadows.
+# - Invariant-floor files (why.md at root, schema/*) cannot be overlaid.
+#   Validators enforce this.

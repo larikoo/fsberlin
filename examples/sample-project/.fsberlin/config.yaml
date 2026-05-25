@@ -1,0 +1,16 @@
+# FSBerlin project config (example).
+project_id: 01JBSAMPLE000000000000000
+name: Sample Project
+created: 2026-05-25
+schema_version: "0.1"
+
+description: |
+  A worked example showing the FSBerlin file layout.
+
+opaque_paths:
+  - .git
+  - .beads
+  - .github
+  - node_modules
+  - target
+  - __pycache__
