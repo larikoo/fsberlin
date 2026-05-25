@@ -3,7 +3,7 @@ id: 01JBPHASE0700000000000000
 title: "Sentinel + Spymaster: scheduled read-only advisors"
 type: phase
 phase_number: 7
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

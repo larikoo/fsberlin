@@ -11,7 +11,6 @@ Each ADR follows the Michael Nygard template:
 # ADR-NNN: Short title
 
 Date: YYYY-MM-DD
-Status: Proposed | Accepted | Superseded by ADR-MMM
 
 ## Context
 What's the situation, what forces are in play.
@@ -25,6 +24,11 @@ What becomes easier; what becomes harder; what we're committed to.
 ## Alternatives considered
 What else we looked at; why those were rejected.
 ```
+
+The `Status:` line from the original Nygard template is **not used**.
+Status is tracked in the card frontmatter as `planning_status:` (see
+`schema/card.schema.yaml` and ADR-009). The body is append-only prose;
+the frontmatter is the machine-readable source of truth.
 
 ## Conventions
 
@@ -41,10 +45,15 @@ What else we looked at; why those were rejected.
 
 ## Status meanings
 
-- **Proposed:** drafted, under review, not yet binding.
-- **Accepted:** in force. Implementations must respect it.
-- **Superseded by ADR-N:** historical. The reasoning may still be
-  educational, but ADR-N is now authoritative.
+Status is the `planning_status:` field in the card frontmatter:
+
+- **`proposed`:** drafted, under review, not yet binding.
+- **`in-discussion`:** actively being debated; may still change.
+- **`accepted`:** in force. Implementations must respect it.
+- **`superseded`:** historical. Set `superseded_by:` to the new ADR
+  slug. The reasoning may still be educational, but the superseding
+  ADR is now authoritative.
+- **`withdrawn`:** abandoned without a replacement.
 
 ## Why ADRs matter here
 

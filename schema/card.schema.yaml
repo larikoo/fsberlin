@@ -1,45 +1,82 @@
 # Card frontmatter schema for FSBerlin.
 # Status: draft. Locks in Phase 0.
+# Updated: ADR-009 — status fields are type-specialized, not universal.
 #
 # This is a YAML schema (not JSON Schema yet — that's a Phase 0 decision)
 # describing the required and optional fields in a card's frontmatter.
+#
+# NOTE: The universal `status:` field is RETIRED as of ADR-009.
+# Do not use it on new cards. See the type-specific sections below.
 
-# === Required fields ===
+# === Fields required on all card types ===
 required:
   - id              # ULID (26 chars). Stable, immutable. Generated on init.
   - title           # Short human title. Free-form string, < 200 chars.
   - type            # Enum: card | adr | phase | waypoint
-  - status          # Enum: pending | in-progress | review | done | blocked | archived
   - created         # ISO 8601 date. Set on creation, never updated.
 
-# === Optional fields ===
+# === Optional fields (all types) ===
 optional:
   - assignee        # Agent ID (human or AI). See agents/<id>.yaml.
   - skills          # List of skill tags.
   - priority        # Enum: low | medium | high | critical
-  - depends_on      # List of card UUIDs this card depends on.
-  - blocks          # List of card UUIDs blocked by this card.
-  - linked          # List of card UUIDs related but not blocking.
+  - depends_on      # List of card slugs this card depends on.
+  - blocks          # List of card slugs blocked by this card.
+  - linked          # List of card slugs related but not blocking.
   - waypoints       # List of waypoint slugs this card belongs to.
   - phase           # Integer. Which phase this card is part of.
   - updated         # ISO 8601 datetime. Substrate-managed, not user-edited.
   - tags            # Free-form tags.
 
-# === ADR-specific fields (when type=adr) ===
-adr_fields:
-  - adr_number      # Integer. Sequential.
-  - supersedes      # ADR slug, if applicable.
-  - superseded_by   # ADR slug, if applicable.
+# === Work card fields (type: card) ===
+# Work cards track execution progress only. Planning provenance is
+# captured structurally via depends_on: references to ADR cards.
+work_fields:
+  required:
+    - building_status
+      # Enum: pending | in-progress | review | done | blocked | archived
 
-# === Phase-specific fields (when type=phase) ===
+# === ADR-specific fields (type: adr) ===
+# ADR cards track ratification lifecycle only. There is no building_status
+# on an ADR — drafting is implicit in the card existing as `proposed`.
+adr_fields:
+  required:
+    - adr_number      # Integer. Sequential. Never reused.
+    - planning_status
+      # Enum: proposed | in-discussion | accepted | superseded | withdrawn
+  optional:
+    - supersedes      # ADR slug. Required when planning_status: superseded.
+    - superseded_by   # ADR slug. Set by the superseding ADR.
+
+# === Phase-specific fields (type: phase) ===
+# Phase cards carry no stored status field. Whether a phase is met is
+# derived by the validator from the states of the cards listed in criteria.
+# Never write a status or met field onto a phase card directly.
 phase_fields:
-  - phase_number    # Integer.
-  - estimated_weeks # Float.
-  - success_criteria # List of strings.
+  required:
+    - phase_number    # Integer.
+    - criteria
+      # List of card slugs. The phase is met when every referenced card
+      # is in its terminal state:
+      #   - ADR cards:  planning_status == accepted
+      #   - Work cards: building_status == done
+      # Derived on demand by the validator. Never stored on the phase card.
+  optional:
+    - estimated_weeks # Float.
+
+# NOTE: success_criteria (list of free-text strings) is retired.
+# Use criteria (list of card slug references) instead. Every criterion
+# must be a card. See ADR-009.
 
 # === Validation rules ===
 # - id is immutable after creation
-# - status transitions are restricted (see schema/transitions.yaml when locked)
-# - depends_on UUIDs must exist
+# - depends_on slugs must resolve to existing cards
 # - title <= 200 chars
 # - depends_on cannot contain self
+# - work card building_status cannot leave `pending` while any ADR card
+#   in depends_on has planning_status != accepted  [enforced in Phase 3]
+# - planning_status: superseded requires superseded_by to be set
+# - phase_met is derived only — never stored  [enforced in Phase 3]
+# - transitions to terminal states (done, accepted, superseded, withdrawn,
+#   archived) require a commit SHA reference in the card's audit log
+#   [enforced in Phase 3]

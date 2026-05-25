@@ -3,7 +3,7 @@ id: 01JBADR003000000000000000
 title: "Waypoints as overlays on a base"
 type: adr
 adr_number: 3
-status: done
+planning_status: proposed
 priority: high
 phase: 0
 assignee: lari
@@ -13,7 +13,7 @@ created: 2026-05-25
 ---
 
 See body in this folder. Review with the human before promoting to
-`status: accepted`.
+`planning_status: accepted`.
 
 The decision text below is a draft based on the May 2026 design
 conversation. It needs your eye before lock-in.
@@ -24,7 +24,6 @@ conversation. It needs your eye before lock-in.
 # ADR-003: Waypoints as overlays on a base
 
 Date: 2026-05-25
-Status: Proposed
 
 ## Context
 

@@ -3,7 +3,7 @@ id: 01JBPHASE0200000000000000
 title: "Git wrapper: commit-on-write, role attribution, waypoint tags"
 type: phase
 phase_number: 2
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

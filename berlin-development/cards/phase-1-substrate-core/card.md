@@ -3,7 +3,7 @@ id: 01JBPHASE0100000000000000
 title: "Substrate core: FS, parser, index, watcher"
 type: phase
 phase_number: 1
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

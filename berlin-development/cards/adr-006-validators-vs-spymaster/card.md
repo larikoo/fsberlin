@@ -3,7 +3,7 @@ id: 01JBADR006000000000000000
 title: "Validators mechanical; Spymaster advisory"
 type: adr
 adr_number: 6
-status: done
+planning_status: proposed
 priority: high
 phase: 0
 assignee: lari
@@ -13,7 +13,7 @@ created: 2026-05-25
 ---
 
 See body in this folder. Review with the human before promoting to
-`status: accepted`.
+`planning_status: accepted`.
 
 The decision text below is a draft based on the May 2026 design
 conversation. It needs your eye before lock-in.
@@ -24,7 +24,6 @@ conversation. It needs your eye before lock-in.
 # ADR-006: Validators are mechanical; Spymaster and Sentinel are advisory
 
 Date: 2026-05-25
-Status: Proposed
 
 ## Context
 

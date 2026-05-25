@@ -3,7 +3,7 @@ id: 01JBPHASE1000000000000000
 title: "README, SPEC polish, dogfooding pass, publish"
 type: phase
 phase_number: 10
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

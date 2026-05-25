@@ -1,10 +1,9 @@
 ---
 id: 01JBADR009000000000000000
-title: "Card workflow has two orthogonal statuses — planning and building"
+title: "Status fields are type-specialized, not universal"
 type: adr
 adr_number: 9
-planning_status: proposed
-building_status: done
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari
@@ -13,128 +12,140 @@ depends_on: []
 created: 2026-05-25
 ---
 
-# ADR-009: Card workflow has two orthogonal statuses — planning and building
+# ADR-009: Status fields are type-specialized, not universal
 
 Date: 2026-05-25
-planning_status: proposed
-building_status: done
 
 ## Context
 
-The current schema has a single `status:` field with values:
-`pending | in-progress | review | done | blocked | archived`.
+The current schema has a single `status:` field shared by all card
+types: `pending | in-progress | review | done | blocked | archived`.
 
-This field tries to serve two orthogonal concerns simultaneously:
+This is a lowest-common-denominator that fits none of the three card
+types well:
 
-1. **Planning lifecycle** — has the decision or plan been ratified? Is an
-   ADR still under discussion? Is a phase's scope locked? This axis moves
-   through `proposed → in-discussion → accepted → superseded/withdrawn`.
+- **ADR cards** need a ratification lifecycle: was the decision drafted,
+  debated, accepted, superseded? `status: done` on an ADR means the
+  draft is written, but not that the architecture is ratified. Two
+  practitioners disagree on what it means.
 
-2. **Building progress** — is implementation underway? Is the work
-   complete? This axis moves through `pending → in-progress → review →
-   done | blocked | archived`.
+- **Work cards** need an execution lifecycle: is implementation pending,
+  underway, in review, done? They don't have a ratification lifecycle —
+  if a work card exists, the decision to do the work has already been
+  made. Adding a planning field to work cards creates redundant state
+  that can drift.
 
-For ADR cards this creates an ambiguity with real consequences: marking
-an ADR `status: done` means the drafting task is complete, but says
-nothing about whether the architectural decision has been reviewed and
-ratified. An ADR can be fully drafted and yet still proposed. Two
-practitioners looking at `status: done` on an ADR card will disagree on
-what it means.
+- **Phase cards** are not work items at all. A phase is a gate: it is
+  either reached or it isn't. Its "status" is derived from whether its
+  constituent cards are complete — there is no independent execution
+  lifecycle to track on the phase card itself.
 
-The same problem applies to phase cards: `status: pending` on a phase
-means implementation hasn't started, but doesn't say whether the phase
-plan has been reviewed and accepted. A phase can be planned and accepted
-(ready to implement) or still open for debate — both look like
-`status: pending`.
+The naive fix — add a second universal field (`planning_status`) — has
+the same problem as the first. It forces every card to carry fields
+that are irrelevant to its type, creates derived state that can go out
+of sync, and still requires someone to update N cards when one ADR is
+accepted.
 
 Phase 0's success criteria required "all eight ADRs have `status:
 accepted`," but `accepted` is not a valid value in the current schema.
-That gap is the symptom. This ADR is the fix.
+That gap is the symptom.
 
 ## Decision
 
-Cards have two status fields, not one.
+The universal `status:` field is retired. Each card type gets the
+status shape that matches its nature.
+
+**ADR cards** → `planning_status`:
 
 ```yaml
 planning_status: proposed | in-discussion | accepted | superseded | withdrawn
+```
+
+**Work cards** (`type: card`) → `building_status`:
+
+```yaml
 building_status: pending | in-progress | review | done | blocked | archived
 ```
 
-The existing `status:` field is renamed to `building_status:`. A new
-`planning_status:` field is added. The schema is updated in the same
-commit that migrates all existing cards.
+**Phase cards** → `criteria` (a list of card slug references):
 
-**Semantics:**
+```yaml
+criteria:
+  - adr-001-filesystem-as-substrate
+  - adr-002-card-equals-folder
+  # ...
+```
 
-- `planning_status` tracks whether the card's decision or plan has been
-  ratified. It answers: "is it safe to build?"
-- `building_status` tracks implementation progress. It answers: "how far
-  along is the work?"
+Phase cards carry no stored status field. Whether a phase is met is
+derived by the validator: a phase is met when every card in its
+`criteria` list is in its terminal state (`planning_status: accepted`
+for ADR cards; `building_status: done` for work cards). This computed
+result is never written back to the phase card — it is always
+re-derived from the current state of the referenced cards.
+
+**The handoff from planning to building is structural, not duplicated
+state.** A work card references its governing ADR via `depends_on:`.
+The validator enforces: a work card's `building_status` cannot leave
+`pending` while any ADR in `depends_on:` has `planning_status` other
+than `accepted`. Accepting the ADR is the signal; no field on the work
+card needs to change.
 
 **Validators enforce:**
 
-1. `building_status` cannot leave `pending` while `planning_status` is
-   `proposed` or `in-discussion`. A card in review limbo cannot be
-   built against.
-2. `planning_status: superseded` locks both fields. A superseded decision
-   is frozen; only a new ADR (with a `supersedes:` reference) can change
-   that state.
-3. Transitions to terminal states (`done`, `accepted`, `superseded`,
-   `withdrawn`, `archived`) require a referenced commit SHA in the card's
-   audit log. The substrate records which commit carried the transition.
+1. Work card `building_status` cannot leave `pending` while any ADR in
+   `depends_on:` has `planning_status: proposed` or `in-discussion`.
+2. `planning_status: superseded` locks the ADR card. `superseded_by:`
+   must be set; the field may not change again.
+3. `phase_met` is derived only — the validator computes it from
+   criteria card states. It is never stored on the phase card.
+4. Transitions to terminal states require a commit SHA reference in the
+   card's audit log.
 
-**Card types use the fields differently:**
-
-- **ADR cards:** `planning_status` is the document lifecycle
-  (`proposed → in-discussion → accepted`). `building_status` tracks
-  drafting work (`pending → done`).
-- **Phase cards:** `planning_status` signals whether the phase plan is
-  locked (`proposed → accepted`). `building_status` tracks
-  implementation.
-- **Work cards:** both fields apply normally. A work card with
-  `planning_status: accepted` and `building_status: in-progress` is the
-  common case.
-
-**This ADR card itself** uses the new schema: `planning_status: proposed`
-(under review), `building_status: done` (drafting complete).
+**Migration:** `status:` is removed from all existing cards. ADR cards
+gain `planning_status:` (mapped from their current state). Work cards
+gain `building_status:` (renamed from `status:`). Phase cards gain
+`criteria:` lists (replacing the free-text `success_criteria:` field).
 
 ## Consequences
 
 **Easier:**
-- Phase 0 success criteria "all ADRs have `status: accepted`" becomes
-  unambiguous: it means `planning_status: accepted`.
-- The validator rule "can't build a proposed plan" is expressible.
-- Views can surface planning health and building health independently.
-- ADR lifecycle and implementation tracking stop conflating.
+- Phase criteria "all ADRs accepted" is unambiguous: check
+  `planning_status: accepted` on each ADR card.
+- No synchronization burden: accepting an ADR unblocks work cards
+  automatically — no fields on work cards need updating.
+- Phase health is always current: derived from card states, never stale.
+- Each card type carries only the fields relevant to it.
 
 **Harder:**
-- All existing cards must be migrated: `status:` → `building_status:`,
-  plus `planning_status:` added.
-- Two fields to maintain instead of one — slightly more ceremony.
-- Schema migration is a breaking change to the public API (ADR-001
-  committed to the filesystem layout as public API).
+- Schema migration is a breaking change (ADR-001: filesystem layout is
+  public API). All existing cards must be migrated in a single commit.
+- Free-text `success_criteria:` on phase cards must be converted to
+  actual card references — every criterion must be a card.
+- The validator has three distinct status checks to implement instead
+  of one.
 
 **Committed to:**
-- `status:` is retired. No new cards use it after migration.
-- `planning_status` is present on every card, even work cards where it
-  defaults to `accepted` (the plan is to do the work; there is no
-  separate ratification step).
-- The validator seam (Phase 3) enforces the cross-field constraints.
+- `status:` is retired. No card uses it after migration.
+- Phase cards never have a stored status field. If you feel the urge to
+  add one, the criterion it would represent should be a card.
+- The `depends_on:` field on work cards is the canonical planning
+  provenance. It is not optional when an ADR governs the work.
 
 ## Alternatives considered
 
-- **Add an `adr_status:` field for ADR cards only.** Fixes ADRs but
-  leaves the same ambiguity on phase cards. Adds a type-specific field
-  for a concept that is general. Rejected.
+- **Two fields on every card (`planning_status` + `building_status`).**
+  Avoids the type-specialization complexity, but forces every card to
+  carry irrelevant fields, duplicates state that can drift, and still
+  requires N writes when one ADR is accepted. Rejected: the
+  synchronization problem was the original complaint.
 
-- **Keep `status:`, add `accepted: true/false` boolean.** Patchwork fix.
-  Doesn't compose. Doesn't model `in-discussion`, `superseded`, or
-  `withdrawn`. The same problem recurs for phases. Rejected.
+- **`adr_status:` field for ADR cards only.** Fixes ADRs but leaves
+  phase cards without a coherent model. Rejected.
 
-- **Use tags to express planning status.** Tags are free-form and
-  unvalidated. The constraint "can't build while proposed" requires
-  machine-readable structured status. Rejected.
+- **Keep `status:`, add `accepted: true/false`.** Patchwork. Doesn't
+  model `in-discussion`, `superseded`, or the derived phase gate.
+  Rejected.
 
-- **No planning_status; ADRs use a separate review workflow outside
-  FSBerlin.** Breaks the dogfooding premise. FSBerlin must be able to
-  represent its own ADR lifecycle. Rejected.
+- **Use tags for planning status.** Tags are free-form and unvalidated.
+  The blocking constraint requires machine-readable structured fields.
+  Rejected.

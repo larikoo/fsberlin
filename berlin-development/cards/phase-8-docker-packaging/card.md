@@ -3,7 +3,7 @@ id: 01JBPHASE0800000000000000
 title: "Docker container, compose, volume conventions"
 type: phase
 phase_number: 8
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

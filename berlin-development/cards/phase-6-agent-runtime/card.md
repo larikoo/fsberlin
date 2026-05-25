@@ -3,7 +3,7 @@ id: 01JBPHASE0600000000000000
 title: "Python agent runtime: load agent YAML, route to model, audit"
 type: phase
 phase_number: 6
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

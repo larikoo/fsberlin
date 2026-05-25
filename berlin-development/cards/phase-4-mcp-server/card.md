@@ -3,7 +3,7 @@ id: 01JBPHASE0400000000000000
 title: "MCP server exposing ~10 tools (rmcp, Rust)"
 type: phase
 phase_number: 4
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

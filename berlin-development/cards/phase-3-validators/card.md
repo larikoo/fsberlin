@@ -3,7 +3,7 @@ id: 01JBPHASE0300000000000000
 title: "Mechanical validators: schema, refs, transitions, paths, secrets"
 type: phase
 phase_number: 3
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

@@ -3,7 +3,7 @@ id: 01JBPHASE0500000000000000
 title: "Authority enforcement and HITL approval tokens"
 type: phase
 phase_number: 5
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

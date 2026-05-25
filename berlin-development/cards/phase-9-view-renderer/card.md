@@ -3,7 +3,7 @@ id: 01JBPHASE0900000000000000
 title: "Minimal read-only web UI (optional, post-MVP)"
 type: phase
 phase_number: 9
-status: blocked
+criteria: []
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]

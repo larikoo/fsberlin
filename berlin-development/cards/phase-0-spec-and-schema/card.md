@@ -3,7 +3,19 @@ id: 01JBPHASE0000000000000000
 title: "SPEC.md and schemas locked"
 type: phase
 phase_number: 0
-status: pending
+criteria:
+  - adr-001-filesystem-as-substrate
+  - adr-002-card-equals-folder
+  - adr-003-waypoints-as-overlays
+  - adr-004-agents-vs-models
+  - adr-005-hitl-floors
+  - adr-006-validators-vs-spymaster
+  - adr-007-editor-as-peer
+  - adr-008-stacks-not-absorbs
+  - adr-009-two-dimensional-status
+  - lock-four-schemas
+  - spec-fill-placeholders
+  - why-md-review
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]
@@ -19,7 +31,7 @@ all eight ADRs from `draft` to `accepted`. Finish SPEC.md so no
 section says "to be expanded."
 
 ## Success criteria
-- All eight ADRs have `status: accepted`.
+- All nine ADRs have `planning_status: accepted`.
 - Schema files validate against themselves (self-describing where
   possible).
 - SPEC.md has no `(To be expanded ...)` markers.

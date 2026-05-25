@@ -3,7 +3,7 @@ id: 01JBADR005000000000000000
 title: "Two HITL floors enforced by the substrate"
 type: adr
 adr_number: 5
-status: done
+planning_status: proposed
 priority: high
 phase: 0
 assignee: lari
@@ -13,7 +13,7 @@ created: 2026-05-25
 ---
 
 See body in this folder. Review with the human before promoting to
-`status: accepted`.
+`planning_status: accepted`.
 
 The decision text below is a draft based on the May 2026 design
 conversation. It needs your eye before lock-in.
@@ -24,7 +24,6 @@ conversation. It needs your eye before lock-in.
 # ADR-005: Two HITL floors enforced by the substrate
 
 Date: 2026-05-25
-Status: Proposed
 
 ## Context
 
