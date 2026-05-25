@@ -25,3 +25,8 @@ Thumbs.db
 # FSBerlin local cache (regenerable from filesystem)
 .fsberlin/index.sqlite
 .fsberlin/index.sqlite-journal
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
