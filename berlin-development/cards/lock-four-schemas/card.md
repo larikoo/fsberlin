@@ -2,7 +2,7 @@
 id: 01JBWORK010000000000000000
 title: "Lock the four schema files"
 type: card
-building_status: in-progress
+building_status: review
 priority: high
 phase: 0
 assignee: claude-code

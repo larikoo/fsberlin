@@ -2,7 +2,7 @@
 id: 01JBSAMPLECARD0000000000002
 title: Boil and hop
 type: card
-status: pending
+building_status: pending
 priority: medium
 assignee: lari
 skills: [brewing]

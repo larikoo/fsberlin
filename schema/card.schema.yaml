@@ -1,5 +1,5 @@
 # Card frontmatter schema for FSBerlin.
-# Status: draft. Locks in Phase 0.
+# Status: locked (Phase 0, 2026-05-29). Changes are breaking; require an ADR.
 # Updated: ADR-009 — status fields are type-specialized, not universal.
 #
 # This is a YAML schema (not JSON Schema yet — that's a Phase 0 decision)

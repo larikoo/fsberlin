@@ -1,10 +1,20 @@
 # Waypoint schema for FSBerlin.
-# Status: draft. Locks in Phase 0. See ADR-003.
+# Status: locked (Phase 0, 2026-05-29). See ADR-003.
+#
+# A waypoint is a card of `type: waypoint` (see card.schema.yaml `type`
+# enum). Its descriptor lives at waypoints/<slug>/waypoint.md and therefore
+# ALSO carries the universal card fields defined in card.schema.yaml:
+#   id, title, type, created (required); plus the shared optionals.
+# The fields listed below are the waypoint-SPECIFIC additions layered on
+# top of those universal fields — analogous to the work_fields / adr_fields
+# / phase_fields sections of card.schema.yaml.
+#
+# The overlay files inside a waypoint folder (see ADR-003) are a separate
+# concern and are NOT governed by this schema; see the note at the bottom.
 
+# === Waypoint-specific fields (layered on the universal card fields) ===
 required:
-  - id              # Waypoint ULID.
-  - slug            # Human-readable folder name.
-  - title           # Short title.
+  - slug            # Human-readable folder name. (Also the card's folder.)
   - status          # Enum: planned | active | reached | abandoned
 
 optional:

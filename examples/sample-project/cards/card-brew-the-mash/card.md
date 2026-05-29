@@ -2,7 +2,7 @@
 id: 01JBSAMPLECARD0000000000001
 title: Brew the mash
 type: card
-status: in-progress
+building_status: in-progress
 priority: medium
 assignee: lari
 skills: [brewing, chemistry]

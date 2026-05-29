@@ -1,5 +1,5 @@
 # Agent definition schema for FSBerlin.
-# Status: draft. Locks in Phase 0. See ADR-004.
+# Status: locked (Phase 0, 2026-05-29). See ADR-004 and ADR-005.
 #
 # Agents are first-class users. This schema describes the YAML file
 # at agents/<agent-id>.yaml.
