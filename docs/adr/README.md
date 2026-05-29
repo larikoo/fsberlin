@@ -43,6 +43,24 @@ the frontmatter is the machine-readable source of truth.
 - **One page is usually enough.** If an ADR is longer than two pages,
   ask whether it's really one decision.
 
+## Decision clauses (§NNN) — see ADR-012
+
+Every normative statement in the **Decision** section carries a marker
+`§NNN`, unique within the ADR, assigned in order, and **never reused or
+renumbered**. A clause is one independently-acceptable claim — if you can
+accept half of it, it's two clauses. Numbering is flat (`§007`, never
+`§004.1`); only the Decision section is numbered (Context, Consequences, and
+Alternatives stay prose).
+
+- **Reference** a clause as `ADR-002§002`. The validator resolves it; a
+  dangling reference is a blocking error.
+- **Supersede** at clause granularity: a later ADR sets
+  `supersedes: [adr-002§002]` and replaces just that clause. The superseded
+  clause is marked, not deleted.
+- **Review** serves clauses one at a time; answer `y`/`n` and the verdict is
+  appended to the review record against its `§ref` without further discussion
+  (`berlin review <adr>`; Phase 4 MCP tool).
+
 ## Status meanings
 
 Status is the `planning_status:` field in the card frontmatter:
