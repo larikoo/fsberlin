@@ -13,6 +13,7 @@ serde.workspace = true
 serde_yaml.workspace = true
 rusqlite.workspace = true
 ulid.workspace = true
+notify.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

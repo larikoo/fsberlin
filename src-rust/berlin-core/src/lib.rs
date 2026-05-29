@@ -16,6 +16,7 @@ pub mod query;
 pub mod render;
 pub mod validate;
 pub mod walk;
+pub mod watch;
 
 use thiserror::Error;
 
@@ -54,6 +55,10 @@ pub enum Error {
     /// or a non-empty output directory).
     #[error("render error: {0}")]
     Render(String),
+
+    /// A filesystem-watcher error.
+    #[error("watch error: {0}")]
+    Notify(#[from] notify::Error),
 }
 
 /// Convenience alias used throughout the crate.

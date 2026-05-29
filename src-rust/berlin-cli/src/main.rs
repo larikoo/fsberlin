@@ -9,8 +9,10 @@
 
 use std::path::PathBuf;
 use std::process::ExitCode;
+use std::sync::atomic::AtomicBool;
+use std::time::Duration;
 
-use berlin_core::{index, init, query, render, validate};
+use berlin_core::{index, init, query, render, validate, watch};
 use clap::{Parser, Subcommand};
 
 /// FSBerlin — a file-hierarchy project-management substrate.
@@ -54,6 +56,12 @@ enum Command {
         /// Output directory (must be empty/new and outside the project).
         #[arg(long)]
         out: PathBuf,
+    },
+    /// Watch a project and keep its index live (Ctrl-C to stop).
+    Watch {
+        /// Project root to watch.
+        #[arg(default_value = ".")]
+        path: PathBuf,
     },
 }
 
@@ -119,6 +127,13 @@ fn run() -> berlin_core::Result<ExitCode> {
             for rel in &report.overlaid {
                 println!("  overlay: {rel}");
             }
+            Ok(ExitCode::SUCCESS)
+        }
+        Some(Command::Watch { path }) => {
+            let db = path.join(".fsberlin").join("index.sqlite");
+            println!("watching {} (Ctrl-C to stop)", path.display());
+            let stop = AtomicBool::new(false);
+            watch::watch(&path, &db, Duration::from_millis(200), &stop)?;
             Ok(ExitCode::SUCCESS)
         }
     }
