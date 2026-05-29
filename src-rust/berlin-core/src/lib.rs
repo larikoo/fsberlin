@@ -12,6 +12,7 @@ pub mod index;
 pub mod links;
 pub mod model;
 pub mod query;
+pub mod validate;
 pub mod walk;
 
 use thiserror::Error;

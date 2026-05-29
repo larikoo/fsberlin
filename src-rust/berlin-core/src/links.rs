@@ -110,21 +110,32 @@ pub fn resolve(root: &Path) -> Result<Resolution> {
         }
     }
 
+    problems.extend(check(&by_slug));
+    Ok(Resolution { by_slug, problems })
+}
+
+/// Check reference soundness over an already-loaded set of cards: every
+/// `depends_on`/`blocks`/`linked`/`criteria` slug must resolve, and no
+/// waypoint slug may appear in a `criteria` list (ADR-011). Duplicate slugs
+/// are detected at load time (see [`resolve`]), not here.
+#[must_use]
+pub fn check(by_slug: &BTreeMap<String, Card>) -> Vec<LinkProblem> {
+    let mut problems = Vec::new();
     let waypoint_slugs: BTreeSet<&str> = by_slug
         .iter()
         .filter(|(_, c)| c.card_type() == CardType::Waypoint)
         .map(|(s, _)| s.as_str())
         .collect();
 
-    for (slug, card) in &by_slug {
+    for (slug, card) in by_slug {
         for to in card.depends_on() {
-            check_resolves(slug, RelationField::DependsOn, to, &by_slug, &mut problems);
+            check_resolves(slug, RelationField::DependsOn, to, by_slug, &mut problems);
         }
         for to in card.blocks() {
-            check_resolves(slug, RelationField::Blocks, to, &by_slug, &mut problems);
+            check_resolves(slug, RelationField::Blocks, to, by_slug, &mut problems);
         }
         for to in card.linked() {
-            check_resolves(slug, RelationField::Linked, to, &by_slug, &mut problems);
+            check_resolves(slug, RelationField::Linked, to, by_slug, &mut problems);
         }
         for to in card.criteria() {
             if !by_slug.contains_key(to) {
@@ -141,8 +152,7 @@ pub fn resolve(root: &Path) -> Result<Resolution> {
             }
         }
     }
-
-    Ok(Resolution { by_slug, problems })
+    problems
 }
 
 fn check_resolves(

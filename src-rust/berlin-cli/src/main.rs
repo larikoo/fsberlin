@@ -10,7 +10,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use berlin_core::{index, query};
+use berlin_core::{index, query, validate};
 use clap::{Parser, Subcommand};
 
 /// FSBerlin — a file-hierarchy project-management substrate.
@@ -33,11 +33,17 @@ enum Command {
         #[arg(long, default_value = ".")]
         path: PathBuf,
     },
+    /// Validate a project: YAML safe-load, schema shape, and references.
+    Validate {
+        /// Project root to validate.
+        #[arg(default_value = ".")]
+        path: PathBuf,
+    },
 }
 
 fn main() -> ExitCode {
     match run() {
-        Ok(()) => ExitCode::SUCCESS,
+        Ok(code) => code,
         Err(e) => {
             eprintln!("error: {e}");
             ExitCode::FAILURE
@@ -45,7 +51,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn run() -> berlin_core::Result<()> {
+fn run() -> berlin_core::Result<ExitCode> {
     let cli = Cli::parse();
     match cli.command {
         None | Some(Command::Version) => {
@@ -54,6 +60,7 @@ fn run() -> berlin_core::Result<()> {
                 env!("CARGO_PKG_VERSION"),
                 berlin_core::version()
             );
+            Ok(ExitCode::SUCCESS)
         }
         Some(Command::Query { expr, path }) => {
             let conn = index::build_in_memory(&path)?;
@@ -65,7 +72,20 @@ fn run() -> berlin_core::Result<()> {
                     println!("{slug}  {title}");
                 }
             }
+            Ok(ExitCode::SUCCESS)
+        }
+        Some(Command::Validate { path }) => {
+            let findings = validate::validate(&path)?;
+            if findings.is_empty() {
+                println!("ok: no problems");
+                Ok(ExitCode::SUCCESS)
+            } else {
+                for finding in &findings {
+                    eprintln!("{finding}");
+                }
+                eprintln!("{} problem(s)", findings.len());
+                Ok(ExitCode::FAILURE)
+            }
         }
     }
-    Ok(())
 }
