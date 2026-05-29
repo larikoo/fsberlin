@@ -5,7 +5,14 @@
 A project management substrate for human-AI collaboration. Cards are folders.
 Waypoints are overlays. Agents are users. The filesystem is the lingua franca.
 
-**Status:** pre-alpha. Specification phase. No working code yet.
+**Status:** pre-alpha. Spec locked (Phase 0). Substrate core built and tested
+(Phase 1): the `berlin` CLI does `init`, `validate`, `query`, `watch`, and
+`render-waypoint`, backed by a filesystem walker, a frontmatter parser, a
+slug-based link resolver, and a regenerable SQLite index.
+
+> ⚠️ **Do not dev and drive.** FSBerlin is usable from a phone, in single
+> keystrokes — which is rather the point, but it's mobile-friendly, not
+> road-friendly. Review from a safe stop.
 
 ## What it is
 
@@ -22,13 +29,13 @@ lock-in.
 
 ## What's here
 
-- `docs/SPEC.md` — the specification (in progress)
+- `docs/SPEC.md` — the specification (core locked at Phase 0)
 - `docs/ARCHITECTURE.md` — the architecture document
 - `docs/why.md` — why this project exists
 - `docs/adr/` — ADR format guide and conventions (the ADRs themselves live
   as cards in `berlin-development/cards/adr-*/`)
 - `schema/` — YAML schemas for cards, agents, projects, waypoints
-- `src-rust/` — Rust substrate core (planned)
+- `src-rust/` — Rust substrate core: `berlin-core` library + `berlin-cli` (Phase 1, working)
 - `src-python/` — Python agent runtime (planned)
 - `examples/sample-project/` — a minimal FSBerlin project showing the layout
 - `berlin-development/` — FSBerlin managed as itself (dogfooding)
@@ -41,6 +48,8 @@ lock-in.
    one architectural commitment (`docs/adr/README.md` explains the format).
 4. Look at `examples/sample-project/` to see what a real FSBerlin project looks like on disk.
 5. Look at `berlin-development/` to see FSBerlin used to manage itself.
+6. Try it: `cd src-rust && cargo run -p berlin-cli -- validate ../berlin-development`
+   (also `query`, `init`, `watch`, `render-waypoint`).
 
 ## License
 
@@ -51,10 +60,11 @@ See `LICENSE-CODE` and `LICENSE-DOCS`.
 
 ## Contributing
 
-The project is in specification phase. The most valuable contributions right
-now are review of the ADRs and the SPEC — does the architecture survive
-contact with other minds? Open an issue or a PR against an ADR with the
+Phase 0 (spec lock) and Phase 1 (substrate core) are done; implementation
+continues in dependency order. The most valuable contributions are still
+review of the ADRs and the SPEC — does the architecture survive contact with
+other minds? — and now also kicking the tyres on the `berlin` CLI against a
+project of your own. Open an issue, or a PR against an ADR with the
 "Alternatives considered" section extended.
 
-Implementation phases follow Phase 0 (spec lock) and proceed in dependency
-order. See `berlin-development/cards/` for the work breakdown.
+See `berlin-development/cards/` for the phase-by-phase work breakdown.
