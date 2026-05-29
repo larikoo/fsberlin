@@ -9,6 +9,7 @@
 
 pub mod frontmatter;
 pub mod model;
+pub mod walk;
 
 use thiserror::Error;
 

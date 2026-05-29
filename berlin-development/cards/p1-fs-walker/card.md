@@ -2,7 +2,7 @@
 id: 01JBP1WALKER00000000000000
 title: "Project layout walker (honors opaque_paths)"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code
