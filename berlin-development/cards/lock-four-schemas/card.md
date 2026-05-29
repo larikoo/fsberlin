@@ -7,7 +7,7 @@ priority: high
 phase: 0
 assignee: claude-code
 skills: [architecture, design]
-depends_on: [adr-009-two-dimensional-status]
+depends_on: [adr-009-two-dimensional-status, adr-010-relation-identity]
 created: 2026-05-25
 ---
 

@@ -13,6 +13,7 @@ criteria:
   - adr-007-editor-as-peer
   - adr-008-stacks-not-absorbs
   - adr-009-two-dimensional-status
+  - adr-010-relation-identity
   - lock-four-schemas
   - spec-fill-placeholders
   - why-md-review
