@@ -2,7 +2,7 @@
 id: 01JBP1CLIINIT0000000000000
 title: "berlin init: scaffold a valid project"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code

@@ -9,6 +9,7 @@
 
 pub mod frontmatter;
 pub mod index;
+pub mod init;
 pub mod links;
 pub mod model;
 pub mod query;
@@ -43,6 +44,10 @@ pub enum Error {
     /// A malformed query expression.
     #[error("query error: {0}")]
     Query(String),
+
+    /// A project-init failure (e.g. the target directory is not empty).
+    #[error("init error: {0}")]
+    Init(String),
 }
 
 /// Convenience alias used throughout the crate.

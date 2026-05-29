@@ -10,7 +10,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use berlin_core::{index, query, validate};
+use berlin_core::{index, init, query, validate};
 use clap::{Parser, Subcommand};
 
 /// FSBerlin — a file-hierarchy project-management substrate.
@@ -37,6 +37,11 @@ enum Command {
     Validate {
         /// Project root to validate.
         #[arg(default_value = ".")]
+        path: PathBuf,
+    },
+    /// Create a new FSBerlin project on disk.
+    Init {
+        /// Where to create the project.
         path: PathBuf,
     },
 }
@@ -86,6 +91,11 @@ fn run() -> berlin_core::Result<ExitCode> {
                 eprintln!("{} problem(s)", findings.len());
                 Ok(ExitCode::FAILURE)
             }
+        }
+        Some(Command::Init { path }) => {
+            init::init(&path)?;
+            println!("initialized FSBerlin project at {}", path.display());
+            Ok(ExitCode::SUCCESS)
         }
     }
 }

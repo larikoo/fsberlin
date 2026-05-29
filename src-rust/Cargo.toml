@@ -26,9 +26,9 @@ serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.9"
 tempfile = "3"
 rusqlite = { version = "0.32", features = ["bundled"] }
+ulid = "1"
 # Anticipated, still to be confirmed by later cards:
 # tokio = { version = "1", features = ["full"] }
 # notify = "6"
 # rmcp = { version = "0.16", features = ["server"] }
 # gix = "0.66"           # gitoxide
-# ulid = "1"
