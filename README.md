@@ -25,7 +25,8 @@ lock-in.
 - `docs/SPEC.md` — the specification (in progress)
 - `docs/ARCHITECTURE.md` — the architecture document
 - `docs/why.md` — why this project exists
-- `docs/adr/` — accepted architecture decision records
+- `docs/adr/` — ADR format guide and conventions (the ADRs themselves live
+  as cards in `berlin-development/cards/adr-*/`)
 - `schema/` — YAML schemas for cards, agents, projects, waypoints
 - `src-rust/` — Rust substrate core (planned)
 - `src-python/` — Python agent runtime (planned)
@@ -36,7 +37,8 @@ lock-in.
 
 1. Start with `docs/why.md` — the motivation in plain language.
 2. Skim `docs/SPEC.md` for the architecture overview.
-3. Read `docs/adr/` in order — each ADR captures one architectural commitment.
+3. Read the ADRs in `berlin-development/cards/adr-*/` in order — each captures
+   one architectural commitment (`docs/adr/README.md` explains the format).
 4. Look at `examples/sample-project/` to see what a real FSBerlin project looks like on disk.
 5. Look at `berlin-development/` to see FSBerlin used to manage itself.
 

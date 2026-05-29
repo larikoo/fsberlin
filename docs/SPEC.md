@@ -1,10 +1,13 @@
 # FSBerlin Specification
 
-**Status:** draft, in progress. Locks at end of Phase 0.
+**Status:** core locked at Phase 0 close (2026-05-29). Later-phase detail
+(operations, validators, authority) is filled in within those phases and is
+ADR-tracked.
 
-This document is the canonical specification. ADRs in `docs/adr/` are the
-decision records that justify each section. If this document and an ADR
-disagree, the ADR is authoritative until this document is updated.
+This document is the canonical specification. The ADRs (stored as cards in
+`berlin-development/cards/adr-*/`; see `docs/adr/README.md` for the format)
+are the decision records that justify each section. If this document and an
+ADR disagree, the ADR is authoritative until this document is updated.
 
 ## 1. Overview
 
@@ -56,14 +59,13 @@ field list; this section describes the model.
 
 **Identity and relations.** Each card's `id` is a ULID, stable and immutable
 across renames (ADR-002); the folder name is for humans. Cross-card relations
-(`depends_on`, `blocks`, `linked`) are lists in frontmatter, resolved by the
-validator against existing cards.
-
-> **Open item (Phase 0):** ADR-002 specifies relations as lists of *UUIDs*,
-> but `card.schema.yaml` and current cards use folder *slugs*
-> (e.g. `depends_on: [adr-009-two-dimensional-status]`), while the example
-> project still uses ULIDs. This must be reconciled by an ADR before the
-> data model is final. See `berlin-development/`.
+(`depends_on`, `blocks`, `linked`, and a phase's `criteria`) are lists of
+**folder slugs** in frontmatter (ADR-010, amending ADR-002), resolved by the
+validator against existing cards — e.g.
+`depends_on: [adr-009-two-dimensional-status]`. The slug is the human-facing
+handle; the ULID remains the substrate's internal identity. Renaming a card
+is a substrate operation (`berlin mv`) that rewrites referrers atomically
+(Phase 3); an unresolvable slug is a blocking validator error.
 
 ### 2.1 Project structure
 

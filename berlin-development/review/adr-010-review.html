@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ADR-010 Review · two-phase triage</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --ink:#e7e9ee; --muted:#9aa3b2;
+    --line:#2a2f3a; --accept:#2ecc71; --accept-d:#14532d; --discuss:#f5a623; --discuss-d:#5a3d05;
+    --accent:#6ea8fe; --radius:14px; --shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f4f5f7; --panel:#fff; --panel2:#f0f2f6; --ink:#1a1d24; --muted:#5b6472;
+      --line:#e2e5ea; --accept-d:#d6f5e3; --discuss-d:#fcefd2; --shadow:0 2px 10px rgba(0,0,0,.08);}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--ink); font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:0 0 130px; -webkit-text-size-adjust:100%;}
+  header{position:sticky; top:0; z-index:5; background:linear-gradient(var(--bg),var(--bg) 70%,transparent);
+    padding:16px 16px 10px; border-bottom:1px solid var(--line)}
+  h1{font-size:19px; margin:0 0 2px}
+  .sub{color:var(--muted); font-size:13px; margin:0}
+  .progwrap{margin-top:10px; height:8px; background:var(--panel2); border-radius:99px; overflow:hidden}
+  .prog{height:100%; width:0; background:linear-gradient(90deg,var(--accept),var(--accent)); transition:width .25s}
+  .counts{display:flex; gap:14px; font-size:12.5px; color:var(--muted); margin-top:7px; flex-wrap:wrap}
+  .counts b{color:var(--ink)}
+  main{padding:14px 16px; max-width:780px; margin:0 auto}
+  .intro{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px; font-size:14px; color:var(--muted)}
+  .intro b{color:var(--ink)}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin:0 0 14px; box-shadow:var(--shadow); scroll-margin-top:120px; transition:border-color .2s,opacity .2s}
+  .card.done-accept{border-color:var(--accept)}
+  .card.done-discuss{border-color:var(--discuss)}
+  .card .top{display:flex; align-items:baseline; gap:8px}
+  .num{font-variant-numeric:tabular-nums; color:var(--accent); font-weight:700; font-size:13px}
+  .tag{font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:99px; padding:1px 8px; margin-left:auto}
+  .crux{font-weight:600; font-size:16px; margin:6px 0 2px}
+  .crux code,.why code{background:var(--panel2); padding:1px 5px; border-radius:6px; font-size:.9em}
+  .why{color:var(--muted); font-size:13.5px; margin:8px 0 0; display:none}
+  .why.open{display:block}
+  .whytoggle{background:none; border:none; color:var(--accent); font-size:12.5px; padding:6px 0 0; cursor:pointer}
+  .btns{display:flex; gap:10px; margin-top:12px}
+  .btn{flex:1; padding:12px 10px; border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+    border-radius:11px; font-size:14.5px; font-weight:600; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:.12s}
+  .btn:active{transform:scale(.97)}
+  .btn.sel-accept{background:var(--accept-d); border-color:var(--accept); color:var(--ink)}
+  .btn.sel-discuss{background:var(--discuss-d); border-color:var(--discuss); color:var(--ink)}
+  .note{display:none; width:100%; margin-top:10px; background:var(--bg); color:var(--ink);
+    border:1px solid var(--line); border-radius:10px; padding:10px; font:14px inherit; resize:vertical; min-height:54px}
+  .note.show{display:block}
+  footer{position:fixed; left:0; right:0; bottom:0; background:var(--panel); border-top:1px solid var(--line);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -2px 12px rgba(0,0,0,.25); z-index:6}
+  .frow{display:flex; gap:10px; align-items:center; max-width:780px; margin:0 auto}
+  .status{font-size:12.5px; color:var(--muted); flex:1}
+  .status b{color:var(--ink)}
+  .cta{padding:11px 16px; border-radius:11px; border:none; font-weight:700; font-size:14.5px; cursor:pointer; color:#08130c; background:var(--accept)}
+  .cta.disabled{background:var(--panel2); color:var(--muted); cursor:not-allowed}
+  .ghost{padding:11px 12px; border-radius:11px; border:1px solid var(--line); background:var(--panel2); color:var(--ink); font-size:13px; cursor:pointer}
+  details.out{max-width:780px; margin:6px auto 0}
+  details.out summary{color:var(--accent); font-size:12.5px; cursor:pointer; list-style:none}
+  #results{width:100%; margin-top:8px; min-height:120px; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px; font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .toast{position:fixed; left:50%; bottom:84px; transform:translateX(-50%) translateY(20px); background:var(--accent); color:#08130c;
+    padding:9px 16px; border-radius:99px; font-weight:700; font-size:13px; opacity:0; pointer-events:none; transition:.25s; z-index:9}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  kbd{background:var(--panel2); border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:0 5px; font-size:11px}
+</style>
+</head>
+<body>
+<header>
+  <h1>ADR-010 · Relations reference slugs</h1>
+  <p class="sub">Phase 1 — triage each decision: <b>Accept</b> or send to <b>Discuss</b>. <span class="hint" style="display:none">Keys: <kbd>a</kbd> / <kbd>d</kbd></span></p>
+  <div class="progwrap"><div class="prog" id="prog"></div></div>
+  <div class="counts">
+    <span>✓ Accept <b id="cAccept">0</b></span>
+    <span>💬 Discuss <b id="cDiscuss">0</b></span>
+    <span>· Undecided <b id="cLeft">0</b></span>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    Tap through each idea. <b>Accept</b> = you're good with it as written. <b>Discuss</b> = flag it for phase 2 (add a note on what bugs you). When every item is decided, hit <b>Copy for Claude</b> and paste it back — that starts the one-by-one discussion of just the flagged items. Progress autosaves on this device.
+  </div>
+  <div id="list"></div>
+</main>
+
+<div class="toast" id="toast">Copied ✓</div>
+
+<footer>
+  <div class="frow">
+    <div class="status" id="status">Decide all items to finish phase 1.</div>
+    <button class="ghost" id="resetBtn">Reset</button>
+    <button class="cta disabled" id="copyBtn">Copy for Claude</button>
+  </div>
+  <details class="out">
+    <summary>show / manually copy the text</summary>
+    <textarea id="results" readonly spellcheck="false"></textarea>
+  </details>
+</footer>
+
+<script>
+const ITEMS = [
+  { id:1, tag:"core decision",
+    crux:"Slugs are the canonical form for cross-card relations.",
+    why:"Relations are written and read as folder slugs, not opaque ULIDs. This is the headline reversal of ADR-002's clause 2. Everything else follows from it." },
+  { id:2, tag:"unchanged from ADR-002",
+    crux:"A card's own <code>id</code> stays an immutable ULID.",
+    why:"Identity vs. reference are split: the card keeps its ULID as the substrate's internal identity (ADR-002 clause 1 is untouched). Only how cards <i>point at each other</i> changes." },
+  { id:3, tag:"scope of the change",
+    crux:"<code>depends_on</code>, <code>blocks</code>, <code>linked</code>, and a phase's <code>criteria</code> all hold slugs.",
+    why:"These four are exactly the cross-card reference fields. Defining the set precisely is what makes the validator's job unambiguous. This is the clause that formally amends ADR-002." },
+  { id:4, tag:"core mechanism",
+    crux:"Rename stability moves to a substrate op: <code>berlin mv &lt;old&gt; &lt;new&gt;</code> rewrites every referrer atomically in one commit.",
+    why:"ULIDs bought one thing — rename-proof references. We give that back as tooling rather than as an opaque ID baked into every file. The cost (rename machinery) is paid rarely; the readability benefit is paid on every read." },
+  { id:5, tag:"failure mode",
+    crux:"Hand-renaming a folder in an editor is allowed, and leaves dangling slugs until reconciled.",
+    why:"We don't forbid raw editor renames (that would betray editor-as-peer, ADR-007). Instead a hand-rename creates a transient broken state that <code>berlin mv</code> or a validator repair pass fixes. Question: is a transient-broken window acceptable, or should hand-renames be actively discouraged?" },
+  { id:6, tag:"validator behaviour",
+    crux:"An unresolvable slug is a blocking validator error (Phase 3), naming the card and field.",
+    why:"Dangling references can't silently rot. The mechanical validator (ADR-006) hard-blocks on them. This is what makes slugs safe — the substrate refuses to commit a broken graph." },
+  { id:7, tag:"invariant",
+    crux:"Slugs are unique within a project; the ULID stays the internal join key / tiebreaker.",
+    why:"For a slug to be a usable reference it must be unique — so uniqueness becomes a validated invariant. The SQLite index still joins on ULIDs internally; slugs are the human-facing handle resolved to ULIDs." },
+  { id:8, tag:"migration (already applied)",
+    crux:"Migrate the example project's ULID relations to slugs; afterwards no relation field anywhere holds a ULID.",
+    why:"Consistency requirement: examples must not contradict the decision. (Already done in the working tree, pending your acceptance of this ADR.)" },
+  { id:9, tag:"meta / framing",
+    crux:"ADR-010 <i>amends</i> ADR-002's relation clause; it does not supersede ADR-002 as a whole.",
+    why:"ADR-002 has four layers (folder=card, frontmatter relations, SQLite index, git transactions). Only the 'relations are UUIDs' detail changes. Is a partial amendment the right model, or should ADR-002 be formally superseded by a rewritten ADR?" },
+];
+
+const KEY = "adr010-review-v1";
+let state = JSON.parse(localStorage.getItem(KEY) || "{}"); // {id:{v:'accept'|'discuss', note:''}}
+
+const list = document.getElementById('list');
+ITEMS.forEach(it => {
+  const s = state[it.id] || {};
+  const el = document.createElement('section');
+  el.className = 'card';
+  el.id = 'card'+it.id;
+  el.innerHTML = `
+    <div class="top"><span class="num">#${it.id}</span><span class="tag">${it.tag}</span></div>
+    <div class="crux">${it.crux}</div>
+    <button class="whytoggle" data-why="${it.id}">why / detail ▾</button>
+    <div class="why" id="why${it.id}">${it.why}</div>
+    <div class="btns">
+      <button class="btn" data-act="accept" data-id="${it.id}">✓ Accept</button>
+      <button class="btn" data-act="discuss" data-id="${it.id}">💬 Discuss</button>
+    </div>
+    <textarea class="note" id="note${it.id}" placeholder="What needs discussing about #${it.id}? (optional)">${s.note||''}</textarea>`;
+  list.appendChild(el);
+});
+
+function paint(){
+  let a=0,d=0;
+  ITEMS.forEach(it=>{
+    const s=state[it.id]||{};
+    const card=document.getElementById('card'+it.id);
+    const accBtn=card.querySelector('[data-act=accept]');
+    const disBtn=card.querySelector('[data-act=discuss]');
+    const note=document.getElementById('note'+it.id);
+    accBtn.classList.toggle('sel-accept', s.v==='accept');
+    disBtn.classList.toggle('sel-discuss', s.v==='discuss');
+    card.classList.toggle('done-accept', s.v==='accept');
+    card.classList.toggle('done-discuss', s.v==='discuss');
+    note.classList.toggle('show', s.v==='discuss');
+    if(s.v==='accept')a++; if(s.v==='discuss')d++;
+  });
+  const left=ITEMS.length-a-d;
+  document.getElementById('cAccept').textContent=a;
+  document.getElementById('cDiscuss').textContent=d;
+  document.getElementById('cLeft').textContent=left;
+  document.getElementById('prog').style.width=(100*(a+d)/ITEMS.length)+'%';
+  const done=left===0;
+  const cta=document.getElementById('copyBtn');
+  cta.classList.toggle('disabled',!done);
+  document.getElementById('status').innerHTML = done
+    ? `Phase 1 done — <b>${a}</b> accepted, <b>${d}</b> to discuss.`
+    : `<b>${left}</b> item${left>1?'s':''} left to decide.`;
+  document.getElementById('results').value=buildText();
+}
+
+function buildText(){
+  const a=[],d=[];
+  ITEMS.forEach(it=>{
+    const s=state[it.id]||{};
+    const short=it.crux.replace(/<[^>]+>/g,'');
+    if(s.v==='accept')a.push(`#${it.id}`);
+    else if(s.v==='discuss')d.push({id:it.id,short,note:(s.note||'').trim()});
+  });
+  const left=ITEMS.length-a.length-d.length;
+  let t=`ADR-010 review — phase 1 triage`;
+  t+=`\n(${a.length} accept · ${d.length} discuss · ${left} undecided)\n`;
+  t+=`\nACCEPTED: ${a.join(', ')||'—'}\n`;
+  t+=`\nDISCUSS:`;
+  if(!d.length) t+=` —`;
+  d.forEach(x=>{ t+=`\n  #${x.id} ${x.short}`; if(x.note) t+=`\n      note: ${x.note}`; });
+  return t;
+}
+
+function setVal(id,v){
+  const cur=state[id]||{};
+  cur.v = (cur.v===v)? null : v; // tap again to clear
+  state[id]=cur;
+  save(); paint();
+  if(cur.v==='discuss'){ const n=document.getElementById('note'+id); setTimeout(()=>n.focus(),120); }
+  else if(cur.v==='accept'){ advance(id); }
+}
+function advance(id){
+  const next=ITEMS.find(it=>it.id>id && !(state[it.id]&&state[it.id].v));
+  const target=next?document.getElementById('card'+next.id):document.querySelector('footer');
+  if(target) target.scrollIntoView({behavior:'smooth',block:next?'center':'end'});
+}
+function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(b){ setVal(+b.dataset.id,b.dataset.act); return; }
+  const w=e.target.closest('[data-why]'); if(w){ document.getElementById('why'+w.dataset.why).classList.toggle('open');
+    w.textContent = w.textContent.includes('▾') ? 'why / detail ▴' : 'why / detail ▾'; return; }
+});
+document.addEventListener('input',e=>{
+  if(e.target.classList.contains('note')){ const id=+e.target.id.replace('note',''); state[id]=state[id]||{}; state[id].note=e.target.value; save();
+    document.getElementById('results').value=buildText(); }
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  if(document.getElementById('copyBtn').classList.contains('disabled')) return;
+  const txt=buildText();
+  const done=()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,()=>{selectOut();}); }
+  else selectOut();
+  function selectOut(){ const r=document.getElementById('results'); r.closest('details').open=true; r.focus(); r.select(); done(); }
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(confirm('Clear all decisions on this device?')){ state={}; save(); ITEMS.forEach(it=>{const n=document.getElementById('note'+it.id); if(n)n.value='';}); paint(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+// desktop keyboard: a / d on the card nearest viewport center
+if(matchMedia('(pointer:fine)').matches){
+  document.querySelector('.hint').style.display='inline';
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='TEXTAREA') return;
+    if(e.key!=='a'&&e.key!=='d') return;
+    const mid=innerHeight/2; let best=null,bd=1e9;
+    ITEMS.forEach(it=>{const r=document.getElementById('card'+it.id).getBoundingClientRect();const dist=Math.abs((r.top+r.bottom)/2-mid);if(dist<bd){bd=dist;best=it.id;}});
+    if(best) setVal(best, e.key==='a'?'accept':'discuss');
+  });
+}
+paint();
+</script>
+</body>
+</html>

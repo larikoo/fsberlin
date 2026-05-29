@@ -28,11 +28,11 @@ Phase 0 of FSBerlin development.
 
 
 Lock the four schema files (card, agent, project, waypoint). Promote
-all eight ADRs from `draft` to `accepted`. Finish SPEC.md so no
+all ten ADRs from `proposed` to `accepted`. Finish SPEC.md so no
 section says "to be expanded."
 
 ## Success criteria
-- All nine ADRs have `planning_status: accepted`.
+- All ten ADRs have `planning_status: accepted`.
 - Schema files validate against themselves (self-describing where
   possible).
 - SPEC.md has no `(To be expanded ...)` markers.

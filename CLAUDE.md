@@ -9,7 +9,8 @@ development is managed using FSBerlin itself, in `berlin-development/`.
 1. `README.md` — what FSBerlin is
 2. `docs/why.md` — why it exists
 3. `docs/SPEC.md` — the specification
-4. `docs/adr/` — every ADR with `status: accepted`
+4. The accepted ADRs in `berlin-development/cards/adr-*/` — every ADR with
+   `planning_status: accepted` (`docs/adr/README.md` explains the format)
 5. `berlin-development/cards/<the card you are working on>/`
 
 Do not skip step 4. The ADRs are load-bearing. Architectural choices in this
