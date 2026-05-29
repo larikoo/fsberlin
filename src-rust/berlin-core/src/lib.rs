@@ -13,6 +13,7 @@ pub mod init;
 pub mod links;
 pub mod model;
 pub mod query;
+pub mod render;
 pub mod validate;
 pub mod walk;
 
@@ -48,6 +49,11 @@ pub enum Error {
     /// A project-init failure (e.g. the target directory is not empty).
     #[error("init error: {0}")]
     Init(String),
+
+    /// A waypoint-render failure (unknown waypoint, invariant-floor overlay,
+    /// or a non-empty output directory).
+    #[error("render error: {0}")]
+    Render(String),
 }
 
 /// Convenience alias used throughout the crate.

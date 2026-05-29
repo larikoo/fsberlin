@@ -10,7 +10,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use berlin_core::{index, init, query, validate};
+use berlin_core::{index, init, query, render, validate};
 use clap::{Parser, Subcommand};
 
 /// FSBerlin — a file-hierarchy project-management substrate.
@@ -43,6 +43,17 @@ enum Command {
     Init {
         /// Where to create the project.
         path: PathBuf,
+    },
+    /// Render a waypoint's projected state (base + overlay) into a directory.
+    RenderWaypoint {
+        /// The waypoint slug to render.
+        slug: String,
+        /// Project root.
+        #[arg(long, default_value = ".")]
+        path: PathBuf,
+        /// Output directory (must be empty/new and outside the project).
+        #[arg(long)]
+        out: PathBuf,
     },
 }
 
@@ -95,6 +106,19 @@ fn run() -> berlin_core::Result<ExitCode> {
         Some(Command::Init { path }) => {
             init::init(&path)?;
             println!("initialized FSBerlin project at {}", path.display());
+            Ok(ExitCode::SUCCESS)
+        }
+        Some(Command::RenderWaypoint { slug, path, out }) => {
+            let report = render::render(&path, &slug, &out)?;
+            println!(
+                "rendered waypoint `{slug}` -> {} ({} base files, {} overlaid)",
+                out.display(),
+                report.base_files,
+                report.overlaid.len()
+            );
+            for rel in &report.overlaid {
+                println!("  overlay: {rel}");
+            }
             Ok(ExitCode::SUCCESS)
         }
     }

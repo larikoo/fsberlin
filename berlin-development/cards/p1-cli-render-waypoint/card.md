@@ -2,7 +2,7 @@
 id: 01JBP1CLIRENDER00000000000
 title: "berlin render-waypoint: base + overlay projection"
 type: card
-building_status: pending
+building_status: done
 priority: medium
 phase: 1
 assignee: claude-code
