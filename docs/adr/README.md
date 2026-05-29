@@ -61,6 +61,11 @@ Alternatives stay prose).
   appended to the review record against its `§ref` without further discussion
   (`berlin review <adr>`; Phase 4 MCP tool).
 
+> ⚠️ **Disclaimer: do not dev and drive.** The one-clause-at-a-time review
+> flow is built to be usable from a phone — which makes it tempting in the
+> wrong places. It is mobile-friendly, not road-friendly. Triage from a safe
+> stop; the clauses will still be there when you've parked.
+
 ## Status meanings
 
 Status is the `planning_status:` field in the card frontmatter:
