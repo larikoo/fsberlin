@@ -2,7 +2,7 @@
 id: 01JBP1PARSER00000000000000
 title: "Typed frontmatter parser (serde_yaml, safe-load)"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code

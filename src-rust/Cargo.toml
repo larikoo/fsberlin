@@ -22,9 +22,9 @@ repository = "https://github.com/lariKemiläinen/fsberlin"
 # Active (added as Phase 1 cards land):
 thiserror = "2"
 clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
 # Anticipated, still to be confirmed by later cards:
-# serde = { version = "1", features = ["derive"] }
-# serde_yaml = "0.9"
 # tokio = { version = "1", features = ["full"] }
 # notify = "6"
 # rusqlite = { version = "0.32", features = ["bundled"] }

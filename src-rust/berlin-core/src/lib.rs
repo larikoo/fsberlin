@@ -7,6 +7,9 @@
 //! and a `Result` alias. The filesystem walker, frontmatter parser, link
 //! resolution, and SQLite mirror each land in their own Phase 1 cards.
 
+pub mod frontmatter;
+pub mod model;
+
 use thiserror::Error;
 
 /// Errors produced by the substrate core.
@@ -18,6 +21,15 @@ pub enum Error {
     /// An I/O error while reading or writing the project tree.
     #[error("i/o error: {0}")]
     Io(#[from] std::io::Error),
+
+    /// A YAML parse or schema-shape error in frontmatter (includes rejection
+    /// of unknown/retired fields such as the retired universal `status:`).
+    #[error("yaml error: {0}")]
+    Yaml(#[from] serde_yaml::Error),
+
+    /// The file had no `---`-delimited frontmatter block at its head.
+    #[error("no frontmatter block found")]
+    MissingFrontmatter,
 }
 
 /// Convenience alias used throughout the crate.

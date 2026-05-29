@@ -9,3 +9,5 @@ description = "FSBerlin substrate core: filesystem layout, parsing, links, index
 
 [dependencies]
 thiserror.workspace = true
+serde.workspace = true
+serde_yaml.workspace = true
