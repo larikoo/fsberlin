@@ -40,9 +40,9 @@ doubt, ask the LLM") that erodes substrate reliability.
 
 ## Decision
 
-Two layers of checking, with a hard separation.
+§001 — Two layers of checking, with a hard separation.
 
-**Validators (the mechanical floor):**
+§002 — **Validators (the mechanical floor):**
 - Schema validation
 - Reference resolution (UUIDs exist)
 - State transition validation
@@ -55,7 +55,7 @@ Validators are deterministic, blocking, and identical across the
 pre-commit hook (for editor users) and the MCP write path (for AI
 users). No LLM is in this path. Implemented in Rust.
 
-**Spymaster and Sentinel (the advisory layer):**
+§003 — **Spymaster and Sentinel (the advisory layer):**
 - Spymaster: cross-card semantic conflicts.
 - Sentinel: security-focused semantic patterns (PII drift, authority
   drift, anomalous access).

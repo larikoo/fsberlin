@@ -38,25 +38,25 @@ else flow?
 
 ## Decision
 
-Two hard floors enforced by the substrate. Between them, agents work
-freely.
+§001 — Two hard floors enforced by the substrate. Between them, agents
+work freely.
 
-**Invariant floor:** changes to project invariants — why.md, schema
+§002 — **Invariant floor:** changes to project invariants — why.md, schema
 files, agent definitions, authority assignments — require a
 cryptographic human signature. Forgeable git author strings are not
 sufficient. The pre-commit hook verifies signatures; unsigned commits
 to invariant-floor paths are rejected.
 
-**External-effect floor:** any action that affects reality outside
+§003 — **External-effect floor:** any action that affects reality outside
 the project (publishing, sending email, deleting files, merging to
 main, calling paid APIs at scale) requires a human approval token.
 The MCP server refuses these operations without a referenced token;
 the token includes the human signer, the action, the target, and a
 timestamp.
 
-Between the floors, agents draft, propose, edit, comment, branch,
-run analysis, render views, query the graph, and write memos. No
-approval needed.
+§004 — Between the floors, agents draft, propose, edit, comment,
+branch, run analysis, render views, query the graph, and write memos.
+No approval needed.
 
 ## Consequences
 

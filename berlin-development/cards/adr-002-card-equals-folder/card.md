@@ -13,10 +13,11 @@ linked: [adr-010-relation-identity]
 created: 2026-05-25
 ---
 
-> **Amended by ADR-010 (2026-05-29):** clause 2 below ("relations are lists
-> of UUIDs") is superseded — cross-card relations now reference folder
-> *slugs*, not ULIDs. The card's own `id` remains an immutable ULID
-> (clause 1). The other three layers stand. See `adr-010-relation-identity`.
+> **Amended by ADR-010 (2026-05-29):** §002 below ("relations are lists of
+> UUIDs") is superseded — cross-card relations now reference folder *slugs*,
+> not ULIDs. The card's own `id` remains an immutable ULID (§001). §003 and
+> §004 stand. See `adr-010-relation-identity` (which sets
+> `supersedes: [adr-002§002]`).
 
 See body in this folder. Review with the human before promoting to
 `planning_status: accepted`.
@@ -53,24 +54,25 @@ structure. Folders don't query well. Folders don't enforce atomicity.
 A card is a folder. Plus four thin layers that make folders behave
 like cards:
 
-1. **UUID for identity.** Each card folder contains a card.md with a
-   UUID in its frontmatter. The folder name is for humans; the UUID is
-   the stable identifier. Renames, moves, and reorganizations don't
-   break references.
+§001 — **UUID for identity.** Each card folder contains a card.md with
+a UUID in its frontmatter. The folder name is for humans; the UUID is
+the stable identifier. Renames, moves, and reorganizations don't
+break references.
 
-2. **Frontmatter for relations.** Cross-card relations
-   (`depends_on:`, `blocks:`, `linked:`) live in YAML frontmatter as
-   lists of UUIDs. Relations are not encoded in folder structure.
+§002 — **Frontmatter for relations.** *(Superseded by ADR-010: relations
+reference folder slugs, not UUIDs. The clause as originally written:)*
+Cross-card relations (`depends_on:`, `blocks:`, `linked:`) live in YAML
+frontmatter as lists of UUIDs. Relations are not encoded in folder
+structure.
 
-3. **SQLite index for queries.** A `.fsberlin/index.sqlite` file
-   mirrors frontmatter from all cards, enabling fast queries
-   ("cards where status=in-progress AND skill includes 'rust'").
-   The index is regenerable from the filesystem; it's a cache, not a
-   store.
+§003 — **SQLite index for queries.** A `.fsberlin/index.sqlite` file
+mirrors frontmatter from all cards, enabling fast queries
+("cards where status=in-progress AND skill includes 'rust'"). The
+index is regenerable from the filesystem; it's a cache, not a store.
 
-4. **Git transactions for atomicity.** Multi-file card updates commit
-   atomically. A card's "current state" is the state at the last
-   commit. Mid-write states are invisible to readers.
+§004 — **Git transactions for atomicity.** Multi-file card updates
+commit atomically. A card's "current state" is the state at the last
+commit. Mid-write states are invisible to readers.
 
 ## Consequences
 

@@ -52,22 +52,22 @@ That gap is the symptom.
 
 ## Decision
 
-The universal `status:` field is retired. Each card type gets the
-status shape that matches its nature.
+§001 — The universal `status:` field is retired. Each card type gets
+the status shape that matches its nature.
 
-**ADR cards** → `planning_status`:
+§002 — **ADR cards** → `planning_status`:
 
 ```yaml
 planning_status: proposed | in-discussion | accepted | superseded | withdrawn
 ```
 
-**Work cards** (`type: card`) → `building_status`:
+§003 — **Work cards** (`type: card`) → `building_status`:
 
 ```yaml
 building_status: pending | in-progress | review | done | blocked | archived
 ```
 
-**Phase cards** → `criteria` (a list of card slug references):
+§004 — **Phase cards** → `criteria` (a list of card slug references):
 
 ```yaml
 criteria:
@@ -83,14 +83,15 @@ for ADR cards; `building_status: done` for work cards). This computed
 result is never written back to the phase card — it is always
 re-derived from the current state of the referenced cards.
 
-**The handoff from planning to building is structural, not duplicated
-state.** A work card references its governing ADR via `depends_on:`.
+§005 — **The handoff from planning to building is structural, not
+duplicated state.** A work card references its governing ADR via
+`depends_on:`.
 The validator enforces: a work card's `building_status` cannot leave
 `pending` while any ADR in `depends_on:` has `planning_status` other
 than `accepted`. Accepting the ADR is the signal; no field on the work
 card needs to change.
 
-**Validators enforce:**
+§006 — **Validators enforce:**
 
 1. Work card `building_status` cannot leave `pending` while any ADR in
    `depends_on:` has `planning_status: proposed` or `in-discussion`.
@@ -101,7 +102,7 @@ card needs to change.
 4. Transitions to terminal states require a commit SHA reference in the
    card's audit log.
 
-**Migration:** `status:` is removed from all existing cards. ADR cards
+§007 — **Migration:** `status:` is removed from all existing cards. ADR cards
 gain `planning_status:` (mapped from their current state). Work cards
 gain `building_status:` (renamed from `status:`). Phase cards gain
 `criteria:` lists (replacing the free-text `success_criteria:` field).

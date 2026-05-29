@@ -10,6 +10,7 @@ assignee: lari
 skills: [architecture, design]
 depends_on: []
 linked: [adr-002-card-equals-folder]
+supersedes: [adr-002§002]
 created: 2026-05-29
 ---
 
@@ -67,29 +68,33 @@ mechanized.
 
 ## Decision
 
-Slugs are the canonical form for cross-card relations. ULIDs remain the
-canonical form for a card's own identity.
+§001 — Slugs are the canonical form for cross-card relations. ULIDs remain
+the canonical form for a card's own identity.
 
 Concretely:
 
-- A card's `id` is a ULID, immutable, the substrate's internal identity for
-  that card. Unchanged from ADR-002 clause 1.
-- `depends_on`, `blocks`, `linked`, and a phase's `criteria` hold **folder
-  slugs**, not ULIDs. This amends ADR-002 clause 2.
-- Rename stability becomes a substrate responsibility, not a property of the
-  reference format. Renaming a card is a substrate operation
-  (`berlin mv <old-slug> <new-slug>`) that atomically rewrites every
-  referring slug across the project in one commit. Renaming a folder by hand
-  in an editor is allowed but leaves dangling slugs until `berlin mv` or the
-  validator's repair pass reconciles them.
-- The reference-resolution validator (Phase 3) treats an unresolvable slug
-  as a blocking error, with the offending card and field named.
-- Slugs are unique within a project. Slug uniqueness is a validated
-  invariant; the ULID remains the tiebreaker of last resort and the key the
-  SQLite index joins on internally.
+§002 — A card's `id` is a ULID, immutable, the substrate's internal identity
+for that card. Unchanged from ADR-002§001.
 
-**Migration:** the example project's ULID relations are rewritten to slugs.
-After migration no relation field in any card contains a ULID.
+§003 — `depends_on`, `blocks`, `linked`, and a phase's `criteria` hold
+**folder slugs**, not ULIDs. This amends ADR-002§002.
+
+§004 — Rename stability becomes a substrate responsibility, not a property of
+the reference format. Renaming a card is a substrate operation
+(`berlin mv <old-slug> <new-slug>`) that atomically rewrites every referring
+slug across the project in one commit. Renaming a folder by hand in an editor
+is allowed but leaves dangling slugs until `berlin mv` or the validator's
+repair pass reconciles them.
+
+§005 — The reference-resolution validator (Phase 3) treats an unresolvable
+slug as a blocking error, with the offending card and field named.
+
+§006 — Slugs are unique within a project. Slug uniqueness is a validated
+invariant; the ULID remains the tiebreaker of last resort and the key the
+SQLite index joins on internally.
+
+§007 — **Migration:** the example project's ULID relations are rewritten to
+slugs. After migration no relation field in any card contains a ULID.
 
 ## Consequences
 

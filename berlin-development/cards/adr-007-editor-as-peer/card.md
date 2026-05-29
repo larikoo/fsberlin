@@ -38,8 +38,8 @@ can produce a state the other path would reject.
 
 ## Decision
 
-Editor edits and MCP edits share a single write path. Validators run
-on both:
+§001 — Editor edits and MCP edits share a single write path. Validators
+run on both:
 
 - For editor users, validators are pre-commit hooks. `lab validate`
   is also exposed as a CLI command for manual runs.
@@ -48,16 +48,16 @@ on both:
 
 Both call the same Rust library code. There is no "MCP-only" check.
 
-Frontmatter is human-writeable: short keys, intuitive values, YAML
+§002 — Frontmatter is human-writeable: short keys, intuitive values, YAML
 comments tolerated, key order irrelevant. Every field is something a
 human could write in vim. The exception is the UUID, generated once
 and ignored visually thereafter.
 
-Conflicts are git's job. Last-known-commit-SHA is included in MCP
+§003 — Conflicts are git's job. Last-known-commit-SHA is included in MCP
 writes; mismatches are rejected with a clear message so the agent
 re-reads. YAML merges cleanly when fields are one-per-line.
 
-The watcher tolerates broken parses transiently. A file that fails
+§004 — The watcher tolerates broken parses transiently. A file that fails
 YAML parse during a watcher tick is logged but does not corrupt the
 SQLite index — the previous valid row is retained. Mid-save states
 debounce out.

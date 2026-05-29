@@ -39,11 +39,11 @@ smears responsibility across runs.
 
 ## Decision
 
-Agents are first-class users with persistent identity. Each agent has
-a role, a `why.md`, a default model, a list of permitted models, a
-write scope, and a track record. The agent's identity persists across
-model changes; the model is a runtime parameter, swappable per
-invocation.
+§001 — Agents are first-class users with persistent identity. Each
+agent has a role, a `why.md`, a default model, a list of permitted
+models, a write scope, and a track record. The agent's identity
+persists across model changes; the model is a runtime parameter,
+swappable per invocation.
 
 Example:
 
@@ -58,13 +58,13 @@ write_scope: [findings/spymaster/]
 read_scope: ["**/*"]
 ```
 
-On-the-fly model overrides for specific tasks are allowed but require
-a stated reason, recorded in the audit log.
+§002 — On-the-fly model overrides for specific tasks are allowed but
+require a stated reason, recorded in the audit log.
 
-Humans are also agents under this model. They have roles, scopes, and
-write attribution. The human-AI distinction becomes "different agents
-with different capability profiles," which is the point of the
-project lab framing.
+§003 — Humans are also agents under this model. They have roles,
+scopes, and write attribution. The human-AI distinction becomes
+"different agents with different capability profiles," which is the
+point of the project lab framing.
 
 ## Consequences
 

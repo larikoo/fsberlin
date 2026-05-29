@@ -51,15 +51,15 @@ whether to finish the migration by applying that model to waypoints.
 Waypoints adopt the phase model, with one waypoint-specific twist for the
 human lifecycle. Six points:
 
-1. **`criteria` replaces `success_criteria`.** A waypoint's `criteria` is a
+§001 — **`criteria` replaces `success_criteria`.** A waypoint's `criteria` is a
    list of slug references; free-text `success_criteria` is retired for
    waypoints (as it already was for phases).
 
-2. **"Reached" is derived, never stored.** A waypoint is *reached* when every
+§002 — **"Reached" is derived, never stored.** A waypoint is *reached* when every
    card in its `criteria` is in its terminal state. The validator computes
    this on demand; it is never written back to the waypoint.
 
-3. **`status` carries human intent only: `planned | active | abandoned`.**
+§003 — **`status` carries human intent only: `planned | active | abandoned`.**
    `reached` is no longer a stored status value. The semantics are *path
    membership*, not temporal position:
    - `planned` — speculative / not on the committed roadmap (e.g. a waypoint
@@ -70,7 +70,7 @@ human lifecycle. Six points:
    An optional `reached_date` records when the derived `reached` first became
    true (an audit timestamp, not a status).
 
-4. **`criteria` may reference card *or* phase slugs**, so "phases 0-3 done"
+§004 — **`criteria` may reference card *or* phase slugs**, so "phases 0-3 done"
    is expressible directly:
    `criteria: [phase-0-spec-and-schema, ..., phase-3-validators]`.
    The terminal test dispatches on the referenced card's type (work →
@@ -79,18 +79,18 @@ human lifecycle. Six points:
    NEVER appear in any `criteria` list. Aggregation flows one way —
    cards/ADRs ← phases ← waypoints — keeping the derive-graph a DAG.
 
-5. **Fold waypoint fields into `card.schema.yaml`** as a fourth
+§005 — **Fold waypoint fields into `card.schema.yaml`** as a fourth
    `waypoint_fields` section, parallel to `work_fields` / `adr_fields` /
    `phase_fields`. The standalone `schema/waypoint.schema.yaml` is retired
    (deleted). Overlay-file semantics remain governed by ADR-003, referenced
    from the schema as a comment.
 
-6. **This is recorded as an ADR** (this one), per CLAUDE.md routing all
+§006 — **This is recorded as an ADR** (this one), per CLAUDE.md routing all
    schema changes through an ADR, and applied in the accepting commit
    (migrating the three dogfooding waypoints), mirroring ADR-009's
    accept-with-migration pattern.
 
-**Migration (in the accepting commit):** `waypoint.schema.yaml` deleted;
+§007 — **Migration (in the accepting commit):** `waypoint.schema.yaml` deleted;
 `waypoint_fields` added to `card.schema.yaml`; the three berlin-development
 waypoints gain `criteria` (phase-slug references) and move
 `status: planned/reached` → `status: active` (all are on the committed

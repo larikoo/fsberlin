@@ -46,9 +46,9 @@ directory.
 
 ## Decision
 
-FSBerlin stacks alongside adjacent tools. It does not absorb them.
+§001 — FSBerlin stacks alongside adjacent tools. It does not absorb them.
 
-Concretely:
+§002 — Adjacent tool-owned directories are opaque. Concretely:
 
 - FSBerlin treats `.beads/`, `.git/`, `.github/`, `.idea/`,
   `node_modules/`, `target/`, and similar tool-owned directories as
@@ -62,7 +62,7 @@ Concretely:
 The opacity list is configurable per-project but starts with sensible
 defaults including all the above.
 
-**Beads as AI session memory.** AI agents operating as users may use
+§003 — **Beads as AI session memory.** AI agents operating as users may use
 the `bd` CLI to write session context — notes that survive across
 conversation sessions, track open questions, or record decisions made
 mid-session. This is the AI *using Beads as a tool*, the same way a

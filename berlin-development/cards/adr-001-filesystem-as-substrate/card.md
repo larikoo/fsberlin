@@ -42,12 +42,14 @@ state lives elsewhere, so they keep a shadow copy in markdown.
 
 ## Decision
 
-FSBerlin uses the filesystem as the primary data substrate. A project
-is a folder. The folder's contents are the canonical state. Plain text
-and YAML files are the data format. Git is the audit log, branching,
-and synchronization mechanism.
+§001 — FSBerlin uses the filesystem as the primary data substrate. A
+project is a folder; the folder's contents are the canonical state.
 
-No proprietary store. No required server. No required UI. The
+§002 — Plain text and YAML files are the data format.
+
+§003 — Git is the audit log, branching, and synchronization mechanism.
+
+§004 — No proprietary store, no required server, no required UI. The
 filesystem on disk is what FSBerlin manages and what every tool reads.
 
 ## Consequences

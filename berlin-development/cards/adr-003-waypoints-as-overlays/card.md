@@ -58,10 +58,11 @@ keeping the goal tangible during long build phases.
 
 ## Decision
 
-Waypoints are folders containing overlay files. Rendering a waypoint
-produces the projected state of the project at that milestone:
+§001 — Waypoints are folders containing overlay files. Rendering a
+waypoint produces the projected state of the project at that milestone:
 `projected = base + overlay`.
 
+§002 — Overlay merge mechanics:
 - The project root holds current state and invariants.
 - `waypoints/<slug>/` folders hold overlays — files that override or
   add to the base.
@@ -71,11 +72,11 @@ produces the projected state of the project at that milestone:
 - Cards in a waypoint folder are aliases (symlinks or UUID
   references), with optional overlay fields.
 
-Waypoints are sequential stages of the chosen plan. Git branches are
-alternative plans (you can branch the whole project to explore a
+§003 — Waypoints are sequential stages of the chosen plan. Git branches
+are alternative plans (you can branch the whole project to explore a
 different roadmap, each branch with its own waypoint sequence).
 
-**Waypoints are opt-in in depth.** A waypoint folder may be as thin as
+§004 — **Waypoints are opt-in in depth.** A waypoint folder may be as thin as
 a single `waypoint.md` listing the features expected at that milestone
 — effectively just a named criteria list. Or it may be a full file tree
 projection with populated cards, example files, and fleshed-out content.
