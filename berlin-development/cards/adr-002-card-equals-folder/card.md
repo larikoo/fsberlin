@@ -9,8 +9,14 @@ phase: 0
 assignee: lari
 skills: [architecture, design]
 depends_on: []
+linked: [adr-010-relation-identity]
 created: 2026-05-25
 ---
+
+> **Amended by ADR-010 (2026-05-29):** clause 2 below ("relations are lists
+> of UUIDs") is superseded — cross-card relations now reference folder
+> *slugs*, not ULIDs. The card's own `id` remains an immutable ULID
+> (clause 1). The other three layers stand. See `adr-010-relation-identity`.
 
 See body in this folder. Review with the human before promoting to
 `planning_status: accepted`.

@@ -3,7 +3,7 @@ id: 01JBADR010000000000000000
 title: "Relations reference slugs; ids stay ULIDs"
 type: adr
 adr_number: 10
-planning_status: in-discussion
+planning_status: accepted
 priority: high
 phase: 0
 assignee: lari
@@ -13,9 +13,9 @@ linked: [adr-002-card-equals-folder]
 created: 2026-05-29
 ---
 
-Drafted 2026-05-29 (berlin-17v); promoted to `in-discussion` 2026-05-29 after
-the recommendation was reviewed and endorsed. Amends the relation clause of
-ADR-002; it does not supersede ADR-002 as a whole.
+Drafted, discussed, and accepted 2026-05-29 (berlin-17v) via a two-phase
+triage review of all nine decisions. Amends the relation clause of ADR-002;
+it does not supersede ADR-002 as a whole.
 
 ---
 
@@ -99,6 +99,11 @@ After migration no relation field in any card contains a ULID.
   reviewer reading frontmatter sees what it points at without a lookup.
 - The schema, the dogfooding cards, and the example project finally agree;
   `lock-four-schemas` can close.
+- Identity is decoupled from label. Because the ULID `id` is stable and only
+  the slug is human-facing, a card can be renamed or repurposed on the fly —
+  new slug, new role — without breaking references or losing its history
+  thread. `berlin mv` rewrites the referrers; the ULID carries the
+  continuity. The label is mutable; the identity is not.
 
 **Harder:**
 - Renames are no longer free. The substrate must own a rename operation that
