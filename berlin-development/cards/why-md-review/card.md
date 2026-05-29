@@ -2,7 +2,7 @@
 id: 01JBWORK030000000000000000
 title: "Review and polish docs/why.md"
 type: card
-building_status: pending
+building_status: done
 priority: medium
 phase: 0
 assignee: lari
