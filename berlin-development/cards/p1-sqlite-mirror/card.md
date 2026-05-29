@@ -2,7 +2,7 @@
 id: 01JBP1SQLITE00000000000000
 title: "SQLite index mirror (regenerable)"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code

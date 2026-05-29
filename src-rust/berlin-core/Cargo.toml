@@ -11,6 +11,7 @@ description = "FSBerlin substrate core: filesystem layout, parsing, links, index
 thiserror.workspace = true
 serde.workspace = true
 serde_yaml.workspace = true
+rusqlite.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

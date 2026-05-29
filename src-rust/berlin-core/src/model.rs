@@ -66,6 +66,73 @@ pub enum Priority {
     Critical,
 }
 
+impl CardType {
+    /// The lowercase string form used in frontmatter and the index.
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            CardType::Card => "card",
+            CardType::Adr => "adr",
+            CardType::Phase => "phase",
+            CardType::Waypoint => "waypoint",
+        }
+    }
+}
+
+impl BuildingStatus {
+    /// The frontmatter string form (kebab-case).
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            BuildingStatus::Pending => "pending",
+            BuildingStatus::InProgress => "in-progress",
+            BuildingStatus::Review => "review",
+            BuildingStatus::Done => "done",
+            BuildingStatus::Blocked => "blocked",
+            BuildingStatus::Archived => "archived",
+        }
+    }
+}
+
+impl PlanningStatus {
+    /// The frontmatter string form (kebab-case).
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            PlanningStatus::Proposed => "proposed",
+            PlanningStatus::InDiscussion => "in-discussion",
+            PlanningStatus::Accepted => "accepted",
+            PlanningStatus::Superseded => "superseded",
+            PlanningStatus::Withdrawn => "withdrawn",
+        }
+    }
+}
+
+impl WaypointStatus {
+    /// The frontmatter string form (lowercase).
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            WaypointStatus::Planned => "planned",
+            WaypointStatus::Active => "active",
+            WaypointStatus::Abandoned => "abandoned",
+        }
+    }
+}
+
+impl Priority {
+    /// The frontmatter string form (lowercase).
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Priority::Low => "low",
+            Priority::Medium => "medium",
+            Priority::High => "high",
+            Priority::Critical => "critical",
+        }
+    }
+}
+
 /// A work card (`type: card`): execution lifecycle only (ADR-009).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -296,6 +363,39 @@ impl Card {
             Card::Phase(c) => &c.criteria,
             Card::Waypoint(c) => &c.criteria,
             _ => &[],
+        }
+    }
+
+    /// The ISO-8601 creation date.
+    #[must_use]
+    pub fn created(&self) -> &str {
+        match self {
+            Card::Work(c) => &c.created,
+            Card::Adr(c) => &c.created,
+            Card::Phase(c) => &c.created,
+            Card::Waypoint(c) => &c.created,
+        }
+    }
+
+    /// The card's priority, if set.
+    #[must_use]
+    pub fn priority(&self) -> Option<Priority> {
+        match self {
+            Card::Work(c) => c.priority,
+            Card::Adr(c) => c.priority,
+            Card::Phase(c) => c.priority,
+            Card::Waypoint(c) => c.priority,
+        }
+    }
+
+    /// The phase number this card belongs to, if set.
+    #[must_use]
+    pub fn phase(&self) -> Option<u32> {
+        match self {
+            Card::Work(c) => c.phase,
+            Card::Adr(c) => c.phase,
+            Card::Phase(c) => c.phase,
+            Card::Waypoint(c) => c.phase,
         }
     }
 }

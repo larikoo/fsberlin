@@ -8,6 +8,7 @@
 //! resolution, and SQLite mirror each land in their own Phase 1 cards.
 
 pub mod frontmatter;
+pub mod index;
 pub mod links;
 pub mod model;
 pub mod walk;
@@ -28,6 +29,10 @@ pub enum Error {
     /// of unknown/retired fields such as the retired universal `status:`).
     #[error("yaml error: {0}")]
     Yaml(#[from] serde_yaml::Error),
+
+    /// A SQLite error from the index mirror.
+    #[error("sqlite error: {0}")]
+    Sqlite(#[from] rusqlite::Error),
 
     /// The file had no `---`-delimited frontmatter block at its head.
     #[error("no frontmatter block found")]
