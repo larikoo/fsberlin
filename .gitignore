@@ -27,7 +27,8 @@ Thumbs.db
 .fsberlin/index.sqlite
 .fsberlin/index.sqlite-journal
 
-# Beads / Dolt files (added by bd init)
+# Beads / Dolt files (added by bd init) — bd data kept local, not published
+.beads/
 .dolt/
 *.db
 .beads-credential-key
