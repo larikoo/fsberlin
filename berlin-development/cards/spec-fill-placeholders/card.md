@@ -2,7 +2,7 @@
 id: 01JBWORK020000000000000000
 title: "Fill SPEC.md placeholder sections"
 type: card
-building_status: pending
+building_status: review
 priority: high
 phase: 0
 assignee: claude-code
