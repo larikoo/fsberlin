@@ -2,7 +2,7 @@
 id: 01JBP1LINKRES0000000000000
 title: "ULID identity + slug relation resolution"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code

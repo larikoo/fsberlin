@@ -255,6 +255,49 @@ impl Card {
             Card::Waypoint(c) => c.card_type,
         }
     }
+
+    /// Cards this card depends on (slugs, ADR-010).
+    #[must_use]
+    pub fn depends_on(&self) -> &[String] {
+        match self {
+            Card::Work(c) => &c.depends_on,
+            Card::Adr(c) => &c.depends_on,
+            Card::Phase(c) => &c.depends_on,
+            Card::Waypoint(c) => &c.depends_on,
+        }
+    }
+
+    /// Cards blocked by this card (slugs).
+    #[must_use]
+    pub fn blocks(&self) -> &[String] {
+        match self {
+            Card::Work(c) => &c.blocks,
+            Card::Adr(c) => &c.blocks,
+            Card::Phase(c) => &c.blocks,
+            Card::Waypoint(c) => &c.blocks,
+        }
+    }
+
+    /// Related-but-not-blocking cards (slugs).
+    #[must_use]
+    pub fn linked(&self) -> &[String] {
+        match self {
+            Card::Work(c) => &c.linked,
+            Card::Adr(c) => &c.linked,
+            Card::Phase(c) => &c.linked,
+            Card::Waypoint(c) => &c.linked,
+        }
+    }
+
+    /// Criteria slugs (phase and waypoint cards only; empty otherwise).
+    #[must_use]
+    pub fn criteria(&self) -> &[String] {
+        match self {
+            Card::Phase(c) => &c.criteria,
+            Card::Waypoint(c) => &c.criteria,
+            _ => &[],
+        }
+    }
 }
 
 /// Agent kind (ADR-004).

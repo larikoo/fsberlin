@@ -8,6 +8,7 @@
 //! resolution, and SQLite mirror each land in their own Phase 1 cards.
 
 pub mod frontmatter;
+pub mod links;
 pub mod model;
 pub mod walk;
 
