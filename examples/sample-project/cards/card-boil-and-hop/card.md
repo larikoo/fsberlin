@@ -6,7 +6,7 @@ building_status: pending
 priority: medium
 assignee: lari
 skills: [brewing]
-depends_on: [01JBSAMPLECARD0000000000001]
+depends_on: [card-brew-the-mash]
 blocks: []
 created: 2026-05-20
 ---

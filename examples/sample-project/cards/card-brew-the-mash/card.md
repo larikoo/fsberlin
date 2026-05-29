@@ -7,7 +7,7 @@ priority: medium
 assignee: lari
 skills: [brewing, chemistry]
 depends_on: []
-blocks: [01JBSAMPLECARD0000000000002]
+blocks: [card-boil-and-hop]
 created: 2026-05-20
 ---
 
