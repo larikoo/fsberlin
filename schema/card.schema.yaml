@@ -1,6 +1,9 @@
 # Card frontmatter schema for FSBerlin.
-# Status: locked (Phase 0, 2026-05-29). Changes are breaking; require an ADR.
+# Status: locked (Phase 0); amended by ADR-011 (2026-05-29). Changes are
+# breaking; require an ADR.
 # Updated: ADR-009 — status fields are type-specialized, not universal.
+# Updated: ADR-011 — waypoint fields folded in here as a 4th type section;
+#          the standalone schema/waypoint.schema.yaml is retired.
 #
 # This is a YAML schema (not JSON Schema yet — that's a Phase 0 decision)
 # describing the required and optional fields in a card's frontmatter.
@@ -64,9 +67,43 @@ phase_fields:
   optional:
     - estimated_weeks # Float.
 
-# NOTE: success_criteria (list of free-text strings) is retired.
-# Use criteria (list of card slug references) instead. Every criterion
-# must be a card. See ADR-009.
+# === Waypoint-specific fields (type: waypoint) ===
+# A waypoint is a milestone projection (ADR-003). Its waypoint.md lives at
+# waypoints/<slug>/waypoint.md and carries the universal card fields above
+# plus the fields below. (ADR-011 folded these in from the former standalone
+# waypoint.schema.yaml, now retired.)
+waypoint_fields:
+  required:
+    - slug            # Human-readable folder name (also the card's folder).
+    - status          # Human-intent lifecycle, NOT completion:
+                      #   planned   — possible/future, not yet committed
+                      #   active    — on the committed roadmap
+                      #   abandoned — removed from the roadmap
+                      # Whether a waypoint is REACHED is derived (see below),
+                      # never a stored status value.
+    - criteria
+      # List of card OR phase slugs. The waypoint is `reached` when every
+      # referenced card is in its terminal state:
+      #   - work cards:  building_status == done
+      #   - ADR cards:   planning_status == accepted
+      #   - phase cards: phase_met (itself derived from the phase's criteria)
+      # Derived on demand by the validator. Never stored on the waypoint.
+  optional:
+    - target_date     # ISO 8601 date (aspirational).
+    - reached_date    # ISO 8601 date. Audit timestamp set when the derived
+                      #   `reached` first becomes true — not a status value.
+    - description
+    # depends_on (universal, above) on a waypoint means prerequisite
+    # waypoint slugs that must be reached first.
+
+# Overlay files inside a waypoint folder (ADR-003) are NOT governed by this
+# schema: each shadows a base file and shares that file's schema. Invariant-
+# floor files (root why.md, schema/*) cannot be overlaid.
+
+# NOTE: success_criteria (list of free-text strings) is retired for BOTH
+# phase and waypoint cards. Use criteria (list of card/phase slug references)
+# instead. Every criterion must be a card. See ADR-009 (phases) and
+# ADR-011 (waypoints).
 
 # === Validation rules ===
 # - id is immutable after creation
@@ -77,6 +114,11 @@ phase_fields:
 #   in depends_on has planning_status != accepted  [enforced in Phase 3]
 # - planning_status: superseded requires superseded_by to be set
 # - phase_met is derived only — never stored  [enforced in Phase 3]
+# - waypoint criteria may reference card or phase slugs; a waypoint slug may
+#   NEVER appear in any criteria list — keeps the derive-graph acyclic
+#   (cards/ADRs <- phases <- waypoints)  [ADR-011, enforced in Phase 3]
+# - waypoint `reached` is derived only — never stored; reached_date is an
+#   optional audit timestamp set when reached first becomes true  [Phase 3]
 # - transitions to terminal states (done, accepted, superseded, withdrawn,
 #   archived) require a commit SHA reference in the card's audit log
 #   [enforced in Phase 3]

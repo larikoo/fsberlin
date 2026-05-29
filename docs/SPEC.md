@@ -44,16 +44,18 @@ field list; this section describes the model.
     superseded | withdrawn`) plus `adr_number`;
   - phase cards → a `criteria` list of card slugs and a `phase_number`; the
     phase's "met" state is *derived*, never stored;
-  - waypoint cards → waypoint-specific fields (`slug`, `status`) per
-    `schema/waypoint.schema.yaml`, layered on the universal card fields.
+  - waypoint cards → waypoint-specific fields (`slug`, `status`, `criteria`)
+    in `card.schema.yaml`'s `waypoint_fields` section; whether a waypoint is
+    *reached* is derived from its `criteria` (card/phase slugs), never stored,
+    like a phase (ADR-011).
 - **Agent** (`schema/agent.schema.yaml`) — a YAML file under `agents/`
   describing a first-class user, human or AI (ADR-004). Carries role, `why`,
   default and permitted models, and read/write scopes.
 - **Project config** (`schema/project.schema.yaml`) — `.fsberlin/config.yaml`.
   Holds project identity, `schema_version`, stewards, and the `opaque_paths`
   list of tool-owned directories the substrate must not scan (ADR-008).
-- **Waypoint** (`schema/waypoint.schema.yaml`) — a milestone overlay folder
-  under `waypoints/` (ADR-003). Its `waypoint.md` is a card of
+- **Waypoint** (`card.schema.yaml` → `waypoint_fields`) — a milestone overlay
+  folder under `waypoints/` (ADR-003, ADR-011). Its `waypoint.md` is a card of
   `type: waypoint`; the overlay files beside it shadow base files and are not
   themselves schema-governed.
 

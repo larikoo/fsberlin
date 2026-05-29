@@ -3,8 +3,9 @@ id: 01JBWP1-SP0000000000000
 slug: waypoint-1-spec-locked
 title: "Spec locked: ADRs 1-10 accepted, schemas final"
 type: waypoint
-status: reached
+status: active
 reached_date: 2026-05-29
+criteria: [phase-0-spec-and-schema]
 created: 2026-05-25
 ---
 
