@@ -1,0 +1,16 @@
+[package]
+name = "berlin-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "FSBerlin command-line interface (the `berlin` command)."
+
+[[bin]]
+name = "berlin"
+path = "src/main.rs"
+
+[dependencies]
+berlin-core = { path = "../berlin-core" }
+clap.workspace = true

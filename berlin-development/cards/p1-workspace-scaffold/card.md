@@ -2,7 +2,7 @@
 id: 01JBP1SCAFFOLD000000000000
 title: "Cargo workspace + berlin-core / berlin-cli crates"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code
