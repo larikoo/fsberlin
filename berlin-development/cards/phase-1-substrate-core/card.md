@@ -3,7 +3,17 @@ id: 01JBPHASE0100000000000000
 title: "Substrate core: FS, parser, index, watcher"
 type: phase
 phase_number: 1
-criteria: []
+criteria:
+  - p1-workspace-scaffold
+  - p1-fs-walker
+  - p1-frontmatter-parser
+  - p1-link-resolution
+  - p1-sqlite-mirror
+  - p1-file-watcher
+  - p1-cli-init
+  - p1-cli-query
+  - p1-cli-validate
+  - p1-cli-render-waypoint
 priority: high
 assignee: claude-code
 skills: [rust, python, architecture]
