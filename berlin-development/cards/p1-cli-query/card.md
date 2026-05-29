@@ -2,7 +2,7 @@
 id: 01JBP1CLIQUERY000000000000
 title: "berlin query: query the index"
 type: card
-building_status: pending
+building_status: done
 priority: high
 phase: 1
 assignee: claude-code

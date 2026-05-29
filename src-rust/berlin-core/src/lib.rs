@@ -11,6 +11,7 @@ pub mod frontmatter;
 pub mod index;
 pub mod links;
 pub mod model;
+pub mod query;
 pub mod walk;
 
 use thiserror::Error;
@@ -37,6 +38,10 @@ pub enum Error {
     /// The file had no `---`-delimited frontmatter block at its head.
     #[error("no frontmatter block found")]
     MissingFrontmatter,
+
+    /// A malformed query expression.
+    #[error("query error: {0}")]
+    Query(String),
 }
 
 /// Convenience alias used throughout the crate.
