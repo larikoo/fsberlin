@@ -3,7 +3,7 @@ id: 01JBADR010000000000000000
 title: "Relations reference slugs; ids stay ULIDs"
 type: adr
 adr_number: 10
-planning_status: proposed
+planning_status: in-discussion
 priority: high
 phase: 0
 assignee: lari
@@ -13,9 +13,9 @@ linked: [adr-002-card-equals-folder]
 created: 2026-05-29
 ---
 
-Drafted 2026-05-29 (berlin-17v). `planning_status: proposed` — needs human
-review before promotion to `in-discussion`. This ADR amends the relation
-clause of ADR-002; it does not supersede ADR-002 as a whole.
+Drafted 2026-05-29 (berlin-17v); promoted to `in-discussion` 2026-05-29 after
+the recommendation was reviewed and endorsed. Amends the relation clause of
+ADR-002; it does not supersede ADR-002 as a whole.
 
 ---
 
