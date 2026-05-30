@@ -3,19 +3,19 @@ id: 01JBADR014000000000000000
 title: "Project root is ordered for cold reading; context.md replaces phantom files"
 type: adr
 adr_number: 14
-planning_status: in-discussion
+planning_status: accepted
 priority: medium
 assignee: lari
 skills: [architecture, design]
 depends_on: []
-linked: [adr-001-filesystem-as-substrate, adr-003-waypoints-as-overlays, adr-005-hitl-floors]
+linked: [adr-001-filesystem-as-substrate, adr-003-waypoints-as-overlays, adr-005-hitl-floors, adr-006-validators-vs-spymaster, adr-015-context-distillation]
 created: 2026-05-30
 ---
 
-Promoted to in-discussion 2026-05-30 after the context-distillation design
-conversation. ADR-015 (context distillation system) depends on this one;
-ADR-014 defines context.md as the invariant-floor orientation file that
-ADR-015's Distiller produces.
+Accepted 2026-05-30 via a six-clause triage drip. Several clauses were
+amended mid-drip (see comments). Reconciled with ADR-015 (context.md carries
+minimal lifecycle frontmatter, not "no frontmatter"). ADR-015 depends on this
+one.
 
 Four goals drove this ADR: readability (what to read first comes first),
 simplicity (one place per concept), context economy (help AI keep its window
@@ -72,44 +72,69 @@ reading order, is:
 
 ```
 why.md          ← 1. why this exists (unchanged; invariant floor)
-context.md      ← 2. what's happening now + constraints + skills in play
-cards/          ← 3. the work
-waypoints/      ← 4. where we're aiming
-agents/         ← 5. who's working
-.fsberlin/      ← 6. tooling config (hidden by default; last)
-findings/       ← (advisory output; read when relevant)
+context.md      ← 2. current state + constraints + cited sources
+context/        ← 3. source material (important/ free; reference/+skills/ on demand)
+cards/          ← 4. the work
+waypoints/      ← 5. where we're aiming
+agents/         ← 6. who's working
+.fsberlin/      ← 7. tooling config (hidden by default)
+findings/       ←    advisory output (read when relevant)
 ```
+
+(`context/garbage/` exists on disk but is excluded from this order and from
+agents' default scope — ADR-015 §009.)
 
 Any other files and folders at the root (sources, working files, output,
 imported documents) are ignored by FSBerlin (ADR-001/008) and do not break
 anything. The layout does not own the whole tree.
 
-§002 — `requirements.md` and `skills.md` are retired as named files. They
-are replaced by `context.md` — a single prose orientation file, no schema,
-no frontmatter. Content:
+§002 — `requirements.md` and `skills.md` are retired as named files.
+Project orientation moves to `context.md`; skill **content** moves to
+`context/skills/<tag>/` (distilled per ADR-015, read on demand — never
+auto-preloaded for every session). `context.md` is prose (with minimal
+lifecycle frontmatter per §003) covering:
 
 - **Current state:** one paragraph on where the project is right now.
 - **Constraints:** the non-negotiables that govern decisions (what
   `requirements.md` would have held).
-- **Skills in play:** what the skill tags used in this project mean and
-  which agents carry them (what `skills.md` would have held).
+- **Skills in play:** which skill tags are used and where their distilled
+  orientation lives (`context/skills/<tag>/context.md`, cheap to load); the
+  full skill material is read on demand, scoped per invocation (what
+  `skills.md` gestured at, now scoped and distilled).
 - **What to do next:** optional — the ICM-style "read this before touching
   any cards" instruction to an incoming agent.
 
-§003 — `context.md` is a **living document**, human-maintained, not
-schema-governed. It is not a card. It does not have frontmatter. It is prose
-that a human or agent can read in 60 seconds and be oriented. Agents should
-read it before loading any cards.
+§003 — `context.md` is a **living document**, human-maintained (or
+Distiller-produced, ADR-015). It is not a card. It carries **minimal
+lifecycle frontmatter only** (`distilled` / `distilled_by` / `status` /
+`reviewed`, per ADR-015) — never a card schema. The body is prose a human or
+agent reads in 60 seconds to be oriented. Agents read it before loading any
+cards.
 
-§004 — `context.md` is an **invariant-floor file** alongside `why.md`:
-waypoint overlays may not shadow it, and changes require human authorship
-(same treatment as `why.md`). Rationale: it holds the project's current
-constraints — overriding it in a milestone projection would let a waypoint
-silently change what the project is allowed to do.
+§004 — `context.md` may not be **shadowed by waypoint overlays** — there is
+always exactly one current `context.md`, read in a single load. But it is
+**not frozen**: it is a living document humans edit as the project evolves
+(iterative work, live ops). A waypoint that anticipates different context
+states this as a *prediction* in its own `waypoint.md`, never by shadowing
+the base; reaching a waypoint may prompt the human to reflect those predicted
+changes into the real `context.md`. So `context.md` is invariant-floor only
+in the *overlay* sense (un-shadowable), not the *immutability* sense —
+distinct from `why.md` and `schema/`, which are both un-shadowable and rarely
+change.
 
-§005 — `berlin init` creates a stub `context.md` alongside `why.md`. The
-stub prompts for the four sections above. An empty `context.md` is valid
-(validates clean); a missing one is a warning, not a blocking error.
+Spymaster maintains context↔reality awareness: it watches for drift
+(`context.md` contradicts a card or ADR), staleness (cards changed,
+`context.md` didn't), and reached-waypoint reconciliation (a reached
+waypoint's predicted context differs from the base), and proposes edits via
+`findings/spymaster/` — read-only, human-promoted (ADR-006). The un-shadowable
+rule keeps `context.md` loadable in one read; Spymaster keeps it honest.
+
+§005 — `berlin init` creates stub `context.md` and `why.md` files whose
+section headings carry **inline comments explaining what each section is
+for**, so a cold author knows what goes where without reading the spec
+(the stub teaches, same principle as the cold-reading order). An empty
+`context.md` is valid (validates clean); a missing one is a warning, not a
+blocking error.
 
 §006 — The **invariant-floor concept generalises from filename to role**:
 the floor is defined as files with a specific *role* in the project, not
@@ -118,6 +143,12 @@ specific *names*. For now the canonical names (`why.md`, `context.md`,
 enabling a future ADR to allow `why.html` or similar as an alternative
 rendering of the same invariant content (with `why.md` as the source of
 truth). Phase 9 (view renderer) is the natural home for rendered outputs.
+
+A corollary: a dropped-in canonical document — a GDD, a project plan, a brief
+in any format — can *serve the role* of `why.md` or `context.md` once it holds
+the right content. If it is not already text-edit-friendly (a PDF, a complex
+doc), ADR-015 distillation is the path that turns it into the plain-text
+canonical file while keeping the original as a cited source.
 
 ## Consequences
 
@@ -147,15 +178,17 @@ truth). Phase 9 (view renderer) is the natural home for rendered outputs.
 
 **Committed to:**
 
-C001 — `why.md` remains the primary identity document and invariant-floor
-sentinel. `context.md` is a second invariant-floor file added by this ADR.
+C001 — `why.md` remains the primary identity document, un-shadowable and
+rarely-changing. `context.md` is added as un-shadowable too, but **living**
+(human-edited; Spymaster-watched), not immutable.
 
 C002 — `requirements.md` and `skills.md` are not created by `berlin init`
 and not referenced in the spec after this ADR. Any existing files by those
 names in a project are user files; FSBerlin ignores them.
 
-C003 — `context.md` has no frontmatter and no schema. It is prose. Adding
-schema to it is a future ADR, not a silent extension.
+C003 — `context.md` carries minimal lifecycle frontmatter only (per ADR-015:
+`distilled` / `distilled_by` / `status` / `reviewed`) — never a card schema.
+Extending it to a card schema is a future ADR, not a silent change.
 
 C004 — The invariant-floor concept is role-based, not filename-based, as a
 principle. The canonical filenames are the current implementation; changing
