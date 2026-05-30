@@ -75,6 +75,21 @@ fn main() -> ExitCode {
     }
 }
 
+/// Error early if `path` does not look like an FSBerlin project, so verbs
+/// like `query` and `watch` give a clear message instead of silent empty
+/// output. `validate` and `init` handle this themselves; `render-waypoint`
+/// fails naturally on a missing waypoints dir.
+fn require_project(path: &std::path::Path) -> berlin_core::Result<()> {
+    let cfg = path.join(".fsberlin").join("config.yaml");
+    if !cfg.is_file() {
+        return Err(berlin_core::Error::Query(format!(
+            "{} is not an FSBerlin project (no .fsberlin/config.yaml)",
+            path.display()
+        )));
+    }
+    Ok(())
+}
+
 fn run() -> berlin_core::Result<ExitCode> {
     let cli = Cli::parse();
     match cli.command {
@@ -87,6 +102,7 @@ fn run() -> berlin_core::Result<ExitCode> {
             Ok(ExitCode::SUCCESS)
         }
         Some(Command::Query { expr, path }) => {
+            require_project(&path)?;
             let conn = index::build_in_memory(&path)?;
             let matches = query::run(&conn, &expr)?;
             if matches.is_empty() {
@@ -130,6 +146,7 @@ fn run() -> berlin_core::Result<ExitCode> {
             Ok(ExitCode::SUCCESS)
         }
         Some(Command::Watch { path }) => {
+            require_project(&path)?;
             let db = path.join(".fsberlin").join("index.sqlite");
             println!("watching {} (Ctrl-C to stop)", path.display());
             let stop = AtomicBool::new(false);
