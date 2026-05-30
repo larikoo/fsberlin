@@ -3,7 +3,7 @@ id: 01JBADR014000000000000000
 title: "Project root is ordered for cold reading; context.md replaces phantom files"
 type: adr
 adr_number: 14
-planning_status: proposed
+planning_status: in-discussion
 priority: medium
 assignee: lari
 skills: [architecture, design]
@@ -12,7 +12,10 @@ linked: [adr-001-filesystem-as-substrate, adr-003-waypoints-as-overlays, adr-005
 created: 2026-05-30
 ---
 
-DRAFT — proposed 2026-05-30. Needs human review before in-discussion.
+Promoted to in-discussion 2026-05-30 after the context-distillation design
+conversation. ADR-015 (context distillation system) depends on this one;
+ADR-014 defines context.md as the invariant-floor orientation file that
+ADR-015's Distiller produces.
 
 Four goals drove this ADR: readability (what to read first comes first),
 simplicity (one place per concept), context economy (help AI keep its window
