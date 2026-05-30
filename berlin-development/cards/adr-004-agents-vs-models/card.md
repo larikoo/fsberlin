@@ -91,6 +91,11 @@ C002 — Agents have unique stable IDs.
 
 C003 — Models are referenced by name in a registry; the registry is versioned.
 
+C004 — *(Added by ADR-015, 2026-05-30)* Named agents are for **persistent,
+recurring roles with track records**. One-shot and periodic operations are
+verbs (`berlin distil`, `berlin validate`, etc.), not agents. Do not create
+a named agent for an operation that has no continuity to preserve.
+
 ## Alternatives considered
 
 - **Model is the user.** Brittle history; loses continuity when
