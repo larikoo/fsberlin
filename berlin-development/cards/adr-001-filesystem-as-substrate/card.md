@@ -73,12 +73,12 @@ filesystem on disk is what FSBerlin manages and what every tool reads.
   slower than a database would be.
 
 **Committed to:**
-- The filesystem layout is part of the public API. Changes are
-  breaking changes.
-- Tooling cannot assume a specific OS filesystem (case-sensitivity,
-  path separators, attribute support).
-- The SQLite cache is a cache, not a store. It can always be
-  regenerated.
+
+C001 — The filesystem layout is part of the public API. Changes are breaking changes.
+
+C002 — Tooling cannot assume a specific OS filesystem (case-sensitivity, path separators, attribute support).
+
+C003 — The SQLite cache is a cache, not a store. It can always be regenerated.
 
 ## Alternatives considered
 

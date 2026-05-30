@@ -126,11 +126,12 @@ gain `building_status:` (renamed from `status:`). Phase cards gain
   of one.
 
 **Committed to:**
-- `status:` is retired. No card uses it after migration.
-- Phase cards never have a stored status field. If you feel the urge to
-  add one, the criterion it would represent should be a card.
-- The `depends_on:` field on work cards is the canonical planning
-  provenance. It is not optional when an ADR governs the work.
+
+C001 — `status:` is retired. No card uses it after migration.
+
+C002 — Phase cards never have a stored status field. If you feel the urge to add one, the criterion it would represent should be a card.
+
+C003 — The `depends_on:` field on work cards is the canonical planning provenance. It is not optional when an ADR governs the work.
 
 ## Alternatives considered
 

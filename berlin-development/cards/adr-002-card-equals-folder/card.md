@@ -89,9 +89,12 @@ commit. Mid-write states are invisible to readers.
 - Reference integrity (no orphan UUIDs) requires validator support.
 
 **Committed to:**
-- UUIDs are immutable once assigned.
-- Folder names are suggestions, not identifiers.
-- The SQLite cache must always be derivable from the filesystem.
+
+C001 — UUIDs are immutable once assigned.
+
+C002 — Folder names are suggestions, not identifiers.
+
+C003 — The SQLite cache must always be derivable from the filesystem.
 
 ## Alternatives considered
 

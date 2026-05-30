@@ -76,9 +76,10 @@ debounce out.
 - Watcher debouncing must absorb editor save bursts.
 
 **Committed to:**
-- The validator library is the canonical check. CLI, pre-commit hook,
-  and MCP callback are thin wrappers.
-- Frontmatter is part of the public API. Schema changes are breaking.
+
+C001 — The validator library is the canonical check. CLI, pre-commit hook, and MCP callback are thin wrappers.
+
+C002 — Frontmatter is part of the public API. Schema changes are breaking.
 
 ## Alternatives considered
 

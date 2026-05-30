@@ -88,11 +88,12 @@ ephemeral context.
   overlapping work.
 
 **Committed to:**
-- The opacity list is part of the spec.
-- FSBerlin will never offer "Beads integration" that reads .beads/.
-- Other "adjacent tool" support (a future Linear connector, for
-  example) follows the same pattern: opaque by default, human-curated
-  cross-reference.
+
+C001 — The opacity list is part of the spec.
+
+C002 — FSBerlin will never offer "Beads integration" that reads .beads/.
+
+C003 — Other "adjacent tool" support (a future Linear connector, for example) follows the same pattern: opaque by default, human-curated cross-reference.
 
 ## Alternatives considered
 

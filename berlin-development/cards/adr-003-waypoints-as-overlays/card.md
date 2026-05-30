@@ -109,8 +109,10 @@ latter. The substrate does not impose a depth requirement.
   Windows).
 
 **Committed to:**
-- Invariant-floor files cannot be overlaid. Validators enforce this.
-- Overlay merge order is well-defined and documented.
+
+C001 — Invariant-floor files cannot be overlaid. Validators enforce this.
+
+C002 — Overlay merge order is well-defined and documented.
 
 ## Alternatives considered
 

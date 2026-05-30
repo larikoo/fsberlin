@@ -10,6 +10,7 @@ assignee: lari
 skills: [architecture, design]
 depends_on: []
 linked: [adr-010-relation-identity, adr-011-waypoint-status-model]
+superseded_by: [adr-013-committed-to-clauses§005]
 created: 2026-05-29
 ---
 
@@ -65,10 +66,10 @@ reference to a non-existent ADR or clause is a blocking error.
 force. The superseded clause is marked superseded (with a pointer to its
 replacement), not deleted — append-only.
 
-§005 — Only statements in the **Decision** section are clauses. Context,
-Consequences, and Alternatives stay prose. The clause set is exactly what is
-ratified. (Whether "Committed to" consequences should also be clauses is
-deferred to a separate decision.)
+§005 — *(Superseded by ADR-013§001–§004: "Committed to" consequences now use
+`CNNN` clause numbering in their own sequence.)* Only Decision-section
+statements are §NNN clauses. Context, Consequences ("Easier"/"Harder"), and
+Alternatives stay prose.
 
 §006 — Clause numbering is **flat** (`§007`, never `§004.1`). No nesting; a
 would-be sub-clause is two sibling clauses (per §002).
@@ -112,9 +113,13 @@ itself cleanly, it is wrong.
   refs.
 
 **Committed to:**
-- Clause numbers are immutable and never reused.
-- Only Decision-section statements are clauses.
-- Clause references resolve or the write is blocked.
+
+C001 — Clause numbers (`§NNN`) are immutable and never reused.
+
+C002 — Only Decision-section statements are `§NNN` clauses; "Committed to"
+consequences use `CNNN` numbering (ADR-013).
+
+C003 — Clause references resolve or the write is blocked.
 
 ## Alternatives considered
 

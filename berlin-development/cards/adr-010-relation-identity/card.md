@@ -120,9 +120,12 @@ slugs. After migration no relation field in any card contains a ULID.
   watcher sees renames.
 
 **Committed to:**
-- No relation field stores a ULID after migration.
-- Slugs are unique per project; `berlin mv` is the supported rename path.
-- A card's own `id` ULID is still immutable and is what the index joins on.
+
+C001 — No relation field stores a ULID after migration.
+
+C002 — Slugs are unique per project; `berlin mv` is the supported rename path.
+
+C003 — A card's own `id` ULID is still immutable and is what the index joins on.
 
 ## Alternatives considered
 

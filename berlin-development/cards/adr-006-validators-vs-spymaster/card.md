@@ -81,9 +81,12 @@ evidence (which cards were read). Humans promote findings to issues.
   requires clean design.
 
 **Committed to:**
-- No mechanical check routes through an LLM, ever.
-- Spymaster and Sentinel have read-only filesystem access.
-- Findings carry their evidence; un-evidenced findings are bugs.
+
+C001 — No mechanical check routes through an LLM, ever.
+
+C002 — Spymaster and Sentinel have read-only filesystem access.
+
+C003 — Findings carry their evidence; un-evidenced findings are bugs.
 
 ## Alternatives considered
 

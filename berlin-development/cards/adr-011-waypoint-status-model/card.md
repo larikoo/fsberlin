@@ -118,9 +118,12 @@ stamp).
   ("active · reached ✓") rather than a single state.
 
 **Committed to:**
-- `success_criteria` is retired everywhere; every criterion is a real card.
-- `reached` is derived only; `reached_date` is an audit timestamp.
-- No waypoint slug appears in any `criteria` list.
+
+C001 — `success_criteria` is retired everywhere; every criterion is a real card.
+
+C002 — `reached` is derived only; `reached_date` is an audit timestamp.
+
+C003 — No waypoint slug appears in any `criteria` list.
 
 ## Alternatives considered
 

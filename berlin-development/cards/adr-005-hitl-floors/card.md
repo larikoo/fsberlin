@@ -75,11 +75,12 @@ No approval needed.
   configured.
 
 **Committed to:**
-- The floors are non-negotiable per-project. A project can configure
-  which actions count as external-effect, but cannot remove the
-  requirement.
-- No AI may sign anything. Signatures are human-only.
-- "Goodwill enforcement" is not acceptable; floors are cryptographic.
+
+C001 — The floors are non-negotiable per-project. A project can configure which actions count as external-effect, but cannot remove the requirement.
+
+C002 — No AI may sign anything. Signatures are human-only.
+
+C003 — "Goodwill enforcement" is not acceptable; floors are cryptographic.
 
 ## Alternatives considered
 

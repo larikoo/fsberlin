@@ -84,10 +84,12 @@ point of the project lab framing.
 - On-the-fly model overrides need a reason field; small audit burden.
 
 **Committed to:**
-- Agent YAML schema is locked at Phase 0.
-- Agents have unique stable IDs.
-- Models are referenced by name in a registry; the registry is
-  versioned.
+
+C001 — Agent YAML schema is locked at Phase 0.
+
+C002 — Agents have unique stable IDs.
+
+C003 — Models are referenced by name in a registry; the registry is versioned.
 
 ## Alternatives considered
 
