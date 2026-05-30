@@ -65,6 +65,11 @@ container). They produce findings in `findings/spymaster/` and
 `findings/sentinel/`. They never edit cards. Findings include their
 evidence (which cards were read). Humans promote findings to issues.
 
+§004 — *(Added by ADR-016, 2026-05-30, amending §003.)* The advisory layer
+also **surfaces high-severity findings proactively** as an end-of-turn digest
+in the human's working channel — not pull-only. Delivery change only:
+read-only, findings-as-record, and human-promotion are unchanged. See ADR-016.
+
 ## Consequences
 
 **Easier:**
@@ -87,6 +92,9 @@ C001 — No mechanical check routes through an LLM, ever.
 C002 — Spymaster and Sentinel have read-only filesystem access.
 
 C003 — Findings carry their evidence; un-evidenced findings are bugs.
+
+C004 — *(Added by ADR-016.)* Proactive surfacing changes delivery, never
+authority: the advisory layer stays read-only and human-promoted.
 
 ## Alternatives considered
 
