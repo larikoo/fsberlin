@@ -3,7 +3,7 @@ id: 01JBADR018000000000000000
 title: "Agent ↔ substrate orchestration: autonomy bounded by floors"
 type: adr
 adr_number: 18
-planning_status: in-discussion
+planning_status: accepted
 priority: high
 assignee: lari
 skills: [architecture, design]
@@ -12,9 +12,9 @@ linked: [adr-004-agents-vs-models, adr-005-hitl-floors, adr-006-validators-vs-sp
 created: 2026-05-30
 ---
 
-IN-DISCUSSION — §001–§007 accepted via drip 2026-05-30 (resolving berlin-apy);
-§008 is the one open decision, deferred to next session (medium-agnostic vs
-code-only). Do not promote to accepted until §008 is decided.
+Accepted 2026-05-31 (resolving berlin-apy). §001–§007 dripped 2026-05-30;
+§008 decided 2026-05-31 → **(A) medium-agnostic**; §009 (output strategy is a
+project choice) added the same day.
 
 The big one: how agentic coders (and other agents) and the FSBerlin substrate
 work together. Phase 4 (MCP) is where most of this is implemented.
@@ -97,30 +97,58 @@ three already-decided things: claims (§002) partition work; `write_scope`
 write collision. A read-only Spymaster running alongside a builder is safe by
 construction.
 
-§008 — **[OPEN — deferred to next session.]** Is the substrate medium-agnostic
-or software-dev-centric? Two options on the table:
+§008 — **The substrate is medium-agnostic; code is one adapter, not the
+model.** The core (cards/phases/claims/completion authority/floors) is
+medium-neutral. `work_branch` (§003) generalizes to **`work_ref`** — branch,
+path, or URL. The "done" event and external-effect floor are medium-specific
+(code merge / article publish / video export / dissertation submit), all
+routed through §004's declared completion authority. FSBerlin reinvents no
+output tool (ADR-008); the git/forge PR loop is the **code adapter** — the
+first to build (Phase 2/4), not the only one. (Rationale: the core is already
+neutral — we published an article to Substack, where the floor was "publish,"
+not a merge; `why.md` calls it a "project lab substrate," not a code tool; the
+cost of generality is near-zero.)
 
-- **(A, recommended) Medium-agnostic.** The core (cards/phases/claims/
-  completion authority/floors) is medium-neutral; code is one *adapter*.
-  Generalize `work_branch` → `work_ref` (branch | path | URL). The "done"
-  event and external-effect floor are medium-specific (code merge / article
-  publish / video export / dissertation submit), all routed through §004.
-  FSBerlin reinvents no output tool (ADR-008); the git/forge PR loop is the
-  *code adapter* — first to build, not the only one. Rationale: the core is
-  already neutral (we published to Substack today — floor was "publish," not
-  merge); `why.md` calls it a "project lab substrate," not a code tool; cost
-  of generality is near-zero.
-- **(B) Code-only.** Accept ≈99% software-dev usage; hardcode the git/PR
-  model; `work_branch`/merge stay code-specific; don't generalize.
+§009 — **Output location is a documented project choice, not a mandate.**
+FSBerlin defines no single canonical home for work product; the docs present
+three strategies with tradeoffs and the project picks one at init (recorded in
+`.fsberlin/config.yaml`):
 
-Lari leaning A (wants to run a dissertation on FSBerlin) but reserved the
-call. Decide §008, then promote this ADR to accepted.
+- **In-card** — `cards/<slug>/output/`. Output co-located with its card; makes
+  the ICM-style "one card's output is the next card's input" flow explicit and
+  browsable. *Con:* bloats the `cards/` tree; heavy for large/binary artifacts.
+- **Project-root** — `output/<slug>/`. Products in one predictable place,
+  separate from the coordination layer. *Con:* output disconnected from its
+  card unless slug-mirrored.
+- **Elsewhere** — the product lives outside the FSBerlin tree (a branch, a
+  sibling repo, a URL). *Con:* nothing to browse in-tree; relies on the
+  pointer.
+
+Whichever the project chooses, **`work_ref` (§003) is the per-card source of
+truth** for where a given product actually is, and an individual card may
+override the project default.
 
 ## Consequences
 
-*(Finalize when §008 is decided — Easier/Harder/Committed-to depend on A vs B.)*
+**Easier:**
+- Agents can carry real work autonomously (dispatch → build → propose) while
+  the floors keep the blast radius bounded — the value of ADR-005 cashed out.
+- Card state and work state stay synced through one field (`work_ref`), no
+  manual bridging.
+- The substrate serves non-code projects — a dissertation, an article series,
+  video — not just software. The same coordination layer, different adapters.
+- Context windows stay small by construction (§005 bundle of distilled
+  essentials + pointers), and the bootstrap is vendor-neutral (§006).
 
-Provisional Committed-to (independent of §008):
+**Harder:**
+- Multiple adapters to build over time (code/git first; publish, export,
+  submit later). The core is neutral but each medium needs its bridge.
+- Completion-authority and severity classification are now load-bearing
+  metadata the substrate must get right.
+- `work_ref` semantics (branch | path | URL) and the output-strategy config
+  add surface the validator and MCP server must handle.
+
+**Committed to:**
 
 C001 — Autonomy is bounded by the two floors (ADR-005), not by human
 initiation. No AI may sign; the floors are the immovable line.
@@ -130,6 +158,9 @@ substrate adds no new concurrency primitive.
 
 C003 — `AGENTS.md` is the canonical, vendor-neutral agent bootstrap; vendor
 files are adapters, never canonical.
+
+C004 — The substrate is medium-agnostic. The core never hardcodes a single
+output medium; code (git/PR) is one adapter among several.
 
 ## Alternatives considered
 
