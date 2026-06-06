@@ -23,6 +23,10 @@ Thumbs.db
 .env
 .env.local
 
+# legion-provision: a separate, local-only homelab project (its own git repo,
+# never published to this public remote). Kept out of fsberlin entirely.
+legion-provision/
+
 # FSBerlin local cache (regenerable from filesystem)
 .fsberlin/index.sqlite
 .fsberlin/index.sqlite-journal
